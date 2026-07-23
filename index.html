@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>US Data Center Capital Map — Deals, Structures & Long-Term Owners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+:root{
+  --ink:#0E1620;
+  --ink-raised:#141E29;
+  --ink-panel:#111A24;
+  --line:#25333F;
+  --line-soft:#1C2833;
+  --steel:#7392A8;
+  --sand:#D9E0E6;
+  --sand-dim:#9AAAB7;
+  /* status palette */
+  --meta:#4A9EE7;      /* Meta — special blue */
+  --construction:#F2A33C; /* under construction */
+  --operating:#4E9C8F;    /* recently delivered / operating */
+  --sold:#B889D6;         /* sold / recapitalized — long-term asset owner */
+  --amber:#F2A33C;
+  --signal:#5C93BC;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--ink);
+  color:var(--sand);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1340px;margin:0 auto;padding:0 28px 80px;}
+
+/* ---------- title block (engineering drawing header) ---------- */
+.titleblock{
+  border:1px solid var(--line);
+  margin-top:34px;
+  display:grid;
+  grid-template-columns:1.9fr 1fr 1fr 0.8fr;
+}
+.tb-cell{padding:14px 16px;border-right:1px solid var(--line);}
+.tb-cell:last-child{border-right:none;}
+.tb-key{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--steel);display:block;margin-bottom:5px;
+}
+.tb-val{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--sand);}
+.tb-main .tb-val{
+  font-family:"Archivo",sans-serif;font-weight:600;
+  font-size:16px;letter-spacing:-.01em;
+}
+
+/* ---------- hero ---------- */
+.hero{padding:52px 0 34px;border-bottom:1px solid var(--line-soft);}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--meta);
+  margin-bottom:20px;
+}
+h1{
+  font-family:"Archivo",sans-serif;font-weight:700;
+  font-size:clamp(30px,5vw,52px);line-height:1.04;
+  letter-spacing:-.025em;margin:0 0 22px;max-width:20ch;
+}
+h1 em{font-style:normal;color:var(--meta);}
+.lede{
+  font-size:17px;line-height:1.6;color:var(--sand-dim);
+  max-width:68ch;margin:0;
+}
+.lede strong{color:var(--sand);font-weight:600;}
+
+/* ---------- controls ---------- */
+.controls{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  padding:22px 0;border-bottom:1px solid var(--line-soft);
+}
+.ctrl-label{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--steel);
+  margin-right:6px;
+}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  padding:7px 13px;border:1px solid var(--line);
+  background:transparent;color:var(--sand-dim);cursor:pointer;
+  letter-spacing:.04em;transition:border-color .16s,color .16s,background .16s;
+}
+.chip:hover{border-color:var(--steel);color:var(--sand);}
+.chip[aria-pressed="true"]{
+  border-color:var(--meta);color:var(--meta);
+  background:rgba(74,158,231,.08);
+}
+.chip:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
+
+/* ---------- main split ---------- */
+.split{
+  display:grid;grid-template-columns:1.32fr 1fr;
+  gap:0;border:1px solid var(--line);border-top:none;
+  min-height:620px;
+}
+.mapcol{border-right:1px solid var(--line);position:relative;background:var(--ink-panel);}
+#map{width:100%;height:620px;}
+.maphint{
+  position:absolute;left:18px;bottom:14px;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--steel);
+  pointer-events:none;
+}
+
+/* legend */
+.legend{
+  display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+  padding:13px 18px;border-bottom:1px solid var(--line);
+  background:var(--ink-raised);
+}
+.lg{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--sand-dim);}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;}
+.dot.meta{background:var(--meta);}
+.dot.construction{background:var(--construction);}
+.dot.operating{background:var(--operating);}
+.dot.sold{background:var(--sold);}
+.lg-scale{display:flex;align-items:center;gap:6px;}
+.lg-scale i{display:block;border-radius:50%;background:var(--steel);opacity:.75;}
+
+/* ---------- dossier ---------- */
+.dossier{background:var(--ink-panel);display:flex;flex-direction:column;}
+.dsr-empty{
+  padding:44px 26px;color:var(--steel);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.9;
+}
+.dsr-empty b{display:block;color:var(--sand);font-size:13px;margin-bottom:10px;letter-spacing:.04em;}
+.dsr-head{padding:22px 26px 18px;border-bottom:1px solid var(--line);}
+.dsr-tag{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:3px 8px;border:1px solid currentColor;margin-bottom:12px;
+}
+.tag-meta{color:var(--meta);}
+.tag-construction{color:var(--construction);}
+.tag-operating{color:var(--operating);}
+.tag-sold{color:var(--sold);}
+.dsr-name{
+  font-family:"Archivo",sans-serif;font-weight:700;font-size:24px;
+  letter-spacing:-.02em;line-height:1.15;margin:0 0 6px;
+}
+.dsr-loc{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  color:var(--steel);letter-spacing:.05em;
+}
+.dsr-metrics{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-bottom:1px solid var(--line);
+}
+.met{padding:15px 16px;border-right:1px solid var(--line);}
+.met:last-child{border-right:none;}
+.met-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--steel);display:block;margin-bottom:5px;}
+.met-v{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;color:var(--sand);}
+
+.dsr-body{padding:22px 26px;overflow-y:auto;flex:1;}
+.sect{margin-bottom:26px;}
+.sect:last-child{margin-bottom:0;}
+.sect-h{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--meta);
+  padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:13px;
+}
+.sect p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:var(--sand-dim);}
+.sect p:last-child{margin-bottom:0;}
+.sect p b{color:var(--sand);font-weight:600;}
+
+/* terms + party rows */
+.party{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:13px;}
+.party:last-child{border-bottom:none;}
+.party-role{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--steel);letter-spacing:.06em;text-transform:uppercase;flex:none;padding-top:2px;max-width:48%;}
+.party-name{text-align:right;color:var(--sand);}
+.party-name.nd{color:var(--steel);font-style:italic;}
+
+/* ---------- SIGNATURE: capital stack one-line ---------- */
+.oneline{margin-top:4px;}
+.ol-row{display:grid;grid-template-columns:74px 1fr;gap:0;align-items:stretch;}
+.ol-rail{position:relative;}
+.ol-rail::before{
+  content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;
+  background:var(--line);transform:translateX(-.5px);
+}
+.ol-row:first-child .ol-rail::before{top:50%;}
+.ol-row:last-child .ol-rail::before{bottom:50%;}
+.ol-node{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:9px;height:9px;border-radius:50%;
+  background:var(--ink-panel);border:1.5px solid var(--steel);
+}
+.ol-row[data-kind="equity"] .ol-node{border-color:var(--meta);background:var(--meta);}
+.ol-row[data-kind="debt"] .ol-node{border-color:var(--construction);}
+.ol-row[data-kind="lease"] .ol-node{border-color:var(--operating);}
+.ol-row[data-kind="credit"] .ol-node{border-color:var(--sold);}
+.ol-tick{
+  position:absolute;left:50%;top:50%;height:1px;width:26px;
+  background:var(--line);transform:translateY(-.5px);
+}
+.ol-band{
+  font-family:"IBM Plex Mono",monospace;font-size:9px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--steel);
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:44px;text-align:right;line-height:1.25;
+}
+.ol-card{
+  border:1px solid var(--line);background:var(--ink-raised);
+  padding:11px 14px;margin:5px 0 5px 4px;
+}
+.ol-party{font-family:"Archivo",sans-serif;font-weight:600;font-size:13.5px;letter-spacing:-.005em;color:var(--sand);}
+.ol-note{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--sand-dim);margin-top:4px;line-height:1.5;}
+.ol-pill{
+  float:right;font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  letter-spacing:.1em;color:var(--steel);border:1px solid var(--line);
+  padding:1px 6px;margin-left:8px;
+}
+
+/* confidence */
+.conf{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+.conf::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+.conf-filed{color:var(--operating);}
+.conf-announced{color:var(--signal);}
+.conf-reported{color:var(--construction);}
+
+.srcs{display:flex;flex-direction:column;gap:6px;}
+.srcs a{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;
+  color:var(--signal);text-decoration:none;
+  border-bottom:1px solid transparent;width:fit-content;
+}
+.srcs a:hover{border-bottom-color:var(--signal);}
+.srcs a:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
+
+/* ---------- platform rail ---------- */
+.platforms{margin-top:56px;}
+.sec-title{
+  font-family:"Archivo",sans-serif;font-weight:700;font-size:26px;
+  letter-spacing:-.02em;margin:0 0 8px;
+}
+.sec-sub{color:var(--sand-dim);font-size:14.5px;max-width:72ch;margin:0 0 26px;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:0;border:1px solid var(--line);}
+.pcard{
+  padding:19px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.pcard-name{font-family:"Archivo",sans-serif;font-weight:600;font-size:15.5px;margin-bottom:3px;letter-spacing:-.01em;}
+.pcard-vehicle{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--meta);letter-spacing:.05em;margin-bottom:9px;}
+.pcard-note{font-size:12.5px;color:var(--sand-dim);line-height:1.55;}
+
+/* ---------- method ---------- */
+.method{margin-top:56px;border-top:1px solid var(--line);padding-top:28px;}
+.method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;}
+.method h4{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--meta);margin:0 0 10px;font-weight:500;
+}
+.method p{font-size:12.5px;color:var(--sand-dim);line-height:1.62;margin:0 0 8px;}
+
+@media(max-width:940px){
+  .split{grid-template-columns:1fr;}
+  .mapcol{border-right:none;border-bottom:1px solid var(--line);}
+  #map{height:430px;}
+  .titleblock{grid-template-columns:1fr 1fr;}
+  .tb-cell{border-bottom:1px solid var(--line);}
+  .wrap{padding:0 18px 60px;}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- title block -->
+  <div class="titleblock">
+    <div class="tb-cell tb-main">
+      <span class="tb-key">Subject</span>
+      <span class="tb-val">US Data Center Capital Map</span>
+    </div>
+    <div class="tb-cell">
+      <span class="tb-key">Scope</span>
+      <span class="tb-val">Site deals, structures &amp; owners</span>
+    </div>
+    <div class="tb-cell">
+      <span class="tb-key">Sources</span>
+      <span class="tb-val">Public filings &amp; press</span>
+    </div>
+    <div class="tb-cell">
+      <span class="tb-key">Rev / Date</span>
+      <span class="tb-val">B — 2026.07.22</span>
+    </div>
+  </div>
+
+  <!-- hero -->
+  <header class="hero">
+    <div class="eyebrow">Where the capital sits</div>
+    <h1>The map is the easy part. <em>The capital stack is the deal.</em></h1>
+    <p class="lede">
+      Hyperscale and AI campuses are being delivered through structures that look nothing like real estate:
+      off-balance-sheet joint ventures, residual value guarantees, project bonds sold against a single lease,
+      and outright platform buyouts by long-term asset owners. This map plots known US projects by where they sit
+      and how much capital they carry — Meta in blue, everyone else colored by lifecycle.
+      <strong>Click any node to open the deal and see its capital stack, terms, and counterparties.</strong>
+    </p>
+  </header>
+
+  <!-- controls -->
+  <div class="controls">
+    <span class="ctrl-label">Filter</span>
+    <button class="chip" data-filter="all" aria-pressed="true">All projects</button>
+    <button class="chip" data-filter="meta" aria-pressed="false">Meta only</button>
+    <button class="chip" data-filter="construction" aria-pressed="false">Under construction</button>
+    <button class="chip" data-filter="operating" aria-pressed="false">Recently delivered</button>
+    <button class="chip" data-filter="sold" aria-pressed="false">Sold / recapitalized</button>
+    <button class="chip" data-filter="external" aria-pressed="false">External capital</button>
+  </div>
+
+  <!-- legend -->
+  <div class="legend">
+    <span class="lg"><span class="dot meta"></span> Meta</span>
+    <span class="lg"><span class="dot construction"></span> Under construction</span>
+    <span class="lg"><span class="dot operating"></span> Recently delivered</span>
+    <span class="lg"><span class="dot sold"></span> Sold / recapitalized</span>
+    <span class="lg lg-scale">
+      <i style="width:7px;height:7px"></i><i style="width:12px;height:12px"></i><i style="width:19px;height:19px"></i>
+      &nbsp;Marker area ∝ announced capital
+    </span>
+  </div>
+
+  <!-- map + dossier -->
+  <div class="split">
+    <div class="mapcol">
+      <div id="map"></div>
+      <div class="maphint">Click a node to open the deal</div>
+    </div>
+    <aside class="dossier" id="dossier">
+      <div class="dsr-empty">
+        <b>No deal selected</b>
+        Select a node on the map.<br><br>
+        Each dossier shows the announced capital, the deal terms
+        (equity/debt split, spread, GMP, guarantees, lease terms), the parties by role,
+        and the capital stack drawn as a one-line — equity at the top,
+        contractual credit support at the bottom.<br><br>
+        Fields that are not public are marked as such rather than estimated.
+      </div>
+    </aside>
+  </div>
+
+  <!-- platform capital -->
+  <section class="platforms">
+    <h2 class="sec-title">Platform capital &amp; long-term owners</h2>
+    <p class="sec-sub">
+      Not every commitment attaches to a single site. These are the pools, platforms, and asset owners funding the
+      build-out — the counterparties a hyperscaler negotiates with, and the institutions that end up owning the
+      powered land and delivery teams after a platform is bought.
+    </p>
+    <div class="pgrid" id="pgrid"></div>
+  </section>
+
+  <!-- method -->
+  <section class="method">
+    <div class="method-grid">
+      <div>
+        <h4>What this is</h4>
+        <p>A working map of how large-scale US data center capacity is being financed and owned, built to compare structures rather than count buildings. Assembled from public sources — not an investment recommendation.</p>
+      </div>
+      <div>
+        <h4>Confidence marking</h4>
+        <p><b>Filed</b> — company release or securities filing. <b>Announced</b> — named-party press release. <b>Reported</b> — press citing unnamed sources; terms may move.</p>
+      </div>
+      <div>
+        <h4>Known gaps</h4>
+        <p>General contractors, GMP terms, and fund LP identities are disclosed inconsistently. Those fields are left blank rather than inferred. Marker size uses announced project or transaction value where available.</p>
+      </div>
+      <div>
+        <h4>Sources</h4>
+        <p>Company releases, investor relations material, securities filings, and trade press. Per-deal source links appear in each dossier.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============================ DATA ============================
+   owner:  "meta" | "peer"
+   status: "construction" | "operating" | "sold"   (drives marker color for non-Meta; Meta always blue)
+   external: true if outside capital is in the structure
+   capital: numeric $B for marker sizing; capLabel: display string
+   terms:  ordered key/value rows; null value renders as "Not publicly disclosed"
+=============================================================== */
+const DEALS = [
+  /* ---------------- META ---------------- */
+  {
+    id:"hyperion", owner:"meta", status:"construction", external:true,
+    name:"Hyperion", loc:"Richland Parish, Louisiana",
+    lat:32.46, lon:-91.62, capital:27, capLabel:"$27B (up to $50B)",
+    power:"Up to 5 GW", online:"2028 (phase 1)", confidence:"filed",
+    structure:"JV + sale-leaseback",
+    summary:"Meta and funds managed by Blue Owl Capital formed a joint venture that develops and owns the campus. Blue Owl funds hold 80%; Meta retains 20% and provides construction and property management services. Meta leases the completed facilities back from the JV. Meta has since signaled total site-related spend could reach ~$50B.",
+    tension:"The lease runs a four-year initial term with extension options — unusually short for an asset this specialized. Meta bought that flexibility by writing a capped residual value guarantee covering the first 16 years of operations, converting lease-term risk into a contingent obligation. It is the clearest example of a hyperscaler using its own credit to de-risk a partner's equity.",
+    terms:[
+      {k:"Equity", v:"Blue Owl funds 80% / Meta 20%"},
+      {k:"Debt", v:"Private credit; Pimco-issued securities"},
+      {k:"Debt spread", v:"~+225 bps (≈2× Meta's own AA- spread)"},
+      {k:"Lease term", v:"4-yr initial + extension options"},
+      {k:"Rent commencement", v:null},
+      {k:"GMP", v:null},
+      {k:"Hyperscaler guarantee", v:"Capped residual value guarantee, first 16 yrs"},
+      {k:"Long-term owner", v:"Blue Owl / Meta JV (SPV)"}
+    ],
+    parties:[
+      {role:"Capital partner (LP)", name:"Funds managed by Blue Owl Capital (80%)"},
+      {role:"Sponsor / developer (GP)", name:"Meta Platforms (20%)"},
+      {role:"Lender", name:"Private credit; securities issued by Pimco"},
+      {role:"Power provider", name:"Entergy Louisiana"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Blue Owl funds — 80%", note:"~$7B cash contribution into the JV", pill:"LP"},
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 20%", note:"Contributed land and construction-in-progress; took ~$3B one-time distribution", pill:"GP"},
+      {band:"Debt", kind:"debt", party:"Private credit, Pimco-issued securities", note:"Priced ~+225 bps — roughly double Meta's own long-term spread for an AA- borrower", pill:"+225"},
+      {band:"Offtake", kind:"lease", party:"Operating lease — Meta as tenant", note:"Four-year initial term with extension options; keeps the asset off Meta's balance sheet", pill:"4 yr"},
+      {band:"Support", kind:"credit", party:"Residual value guarantee", note:"Capped cash payment, first 16 years of operations — the price of the short lease term", pill:"16 yr"}
+    ],
+    sources:[
+      {t:"Meta Investor Relations — JV announcement", u:"https://investor.atmeta.com/investor-news/press-release-details/2025/Meta-Announces-Joint-Venture-with-Funds-Managed-by-Blue-Owl-Capital-to-Develop-Hyperion-Data-Center/default.aspx"},
+      {t:"Data Center Frontier — Hyperion ownership & power", u:"https://www.datacenterfrontier.com/hyperscale/article/55310441/ownership-and-power-challenges-in-metas-hyperion-and-prometheus-data-centers"},
+      {t:"NOLA.com — $50B expansion", u:"https://www.nola.com/news/business/meta-louisiana-ai-data-center-richland-parish/article_d1308014-c718-4c34-a75f-476a151ef1a7.html"}
+    ]
+  },
+  {
+    id:"elpaso", owner:"meta", status:"construction", external:true,
+    name:"El Paso Campus", loc:"El Paso, Texas",
+    lat:31.93, lon:-106.40, capital:13, capLabel:"~$13B financing",
+    power:"~1 GW", online:"2028", confidence:"reported",
+    structure:"Project-level debt / bond",
+    summary:"Meta is assembling a financing package of roughly $13B for the El Paso campus, led by Morgan Stanley and JPMorgan and expected to be mostly debt with a smaller equity slice — leaving Meta more direct ownership than the Hyperion JV. First phase alone is a $1.5B+ Meta build; the financing wraps the larger campus.",
+    tension:"This is the live one. In July 2026 BlackRock began marketing a bond sale of more than $12B against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same credit logic as Hyperion, expressed entirely through debt instead of a JV.",
+    terms:[
+      {k:"Equity", v:"Meta (smaller slice; more direct ownership)"},
+      {k:"Debt", v:"$12B+ bond sale, marketed by BlackRock"},
+      {k:"Debt spread", v:null},
+      {k:"Lease term", v:"Long-term lease, Meta as tenant"},
+      {k:"Rent commencement", v:null},
+      {k:"GMP", v:null},
+      {k:"Hyperscaler guarantee", v:"Long-term IG lease underwrites the bond"},
+      {k:"Long-term owner", v:"Meta (majority) + bondholders"}
+    ],
+    parties:[
+      {role:"Lead arrangers", name:"Morgan Stanley; JPMorgan Chase"},
+      {role:"Bond marketing", name:"BlackRock"},
+      {role:"Sponsor / developer", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"General contractor", name:null},
+      {role:"Equity partners", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms", note:"Smaller equity slice; Meta retains more direct ownership than under the Hyperion JV", pill:"Sponsor"},
+      {band:"Debt", kind:"debt", party:"Bond sale — $12B+", note:"Marketing began Jul 2026; pricing expected the following week", pill:"Live"},
+      {band:"Debt", kind:"debt", party:"Morgan Stanley / JPMorgan", note:"Lead arrangers running investor calls", pill:"Leads"},
+      {band:"Offtake", kind:"lease", party:"Long-term lease — Meta as tenant", note:"Contracted cash flows against a single investment-grade tenant make the bond placeable", pill:"IG"}
+    ],
+    sources:[
+      {t:"TNW — El Paso $13B financing", u:"https://thenextweb.com/news/meta-el-paso-13-billion-data-center-financing"},
+      {t:"AOL — Meta El Paso land purchase", u:"https://www.aol.com/meta-completes-8-5m-purchase-132609504.html"}
+    ]
+  },
+  {
+    id:"prometheus", owner:"meta", status:"operating", external:false,
+    name:"Prometheus", loc:"New Albany, Ohio",
+    lat:40.08, lon:-82.80, capital:5, capLabel:"Not disclosed",
+    power:"1 GW", online:"2026", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"Meta's first gigawatt-scale AI supercluster, on the New Albany campus where Meta has operated since 2017. No external capital partner announced — this one sits on Meta's own balance sheet and is the design template Hyperion is built from.",
+    tension:"Speed was the governing constraint: the buildout used aluminium tent structures with weatherproof fabric to start compute sooner, and on-site gas turbines rather than waiting on utility interconnection. Prometheus proves the delivery model that Hyperion then wraps in outside capital.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"Lease term", v:"n/a — owned"},
+      {k:"GMP", v:null},
+      {k:"Hyperscaler guarantee", v:"n/a"},
+      {k:"Power", v:"On-site gas turbines (behind-the-meter)"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms (balance sheet)"},
+      {role:"Land vehicle", name:"Sidecat LLC (Clover Valley Rd parcel, $42M)"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"Funded on balance sheet; no announced external capital partner", pill:"Direct"},
+      {band:"Land", kind:"equity", party:"Sidecat LLC", note:"$42M Clover Valley Road parcel acquisition expanding the campus", pill:"SPV"},
+      {band:"Power", kind:"credit", party:"On-site gas turbines", note:"Generation built on site to avoid interconnection queue delay", pill:"BTM"}
+    ],
+    sources:[
+      {t:"Data Center Frontier — Hyperion & Prometheus", u:"https://www.datacenterfrontier.com/hyperscale/article/55310441/ownership-and-power-challenges-in-metas-hyperion-and-prometheus-data-centers"},
+      {t:"DCD — multi-GW cluster plans", u:"https://www.datacenterdynamics.com/en/news/meta-to-invest-hundreds-of-billions-of-dollars-into-compute-to-build-superintelligence-with-several-multi-gw-data-center-clusters/"}
+    ]
+  },
+  {
+    id:"lebanon", owner:"meta", status:"construction", external:false,
+    name:"Lebanon Campus", loc:"Lebanon, Indiana",
+    lat:40.05, lon:-86.47, capital:10, capLabel:"$10B+",
+    power:"~1 GW", online:"2027", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"A 4 million sq ft campus across 13 buildings — 10 data center buildings, a network facility, a logistics warehouse and an administrative building. Peak construction is expected to draw more than 4,000 workers.",
+    tension:"Roughly the same gigawatt of capacity as Hyperion's first phase, at a fraction of the announced capital and with no external partner. Useful as a control: it isolates how much of Hyperion's $27B is power and long-lived infrastructure rather than data center shell.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"GMP", v:null},
+      {k:"Hyperscaler guarantee", v:"n/a"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Workforce program", name:"Boone County Career Collaborative"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$10B+ committed; no announced external capital partner", pill:"Direct"},
+      {band:"Asset", kind:"debt", party:"13 buildings / 4M sq ft", note:"10 data center buildings, network facility, logistics warehouse, admin building", pill:"~1 GW"}
+    ],
+    sources:[
+      {t:"Blackridge Research — Meta project list", u:"https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-projects-meta-facebook-locations-world"}
+    ]
+  },
+  {
+    id:"cheyenne", owner:"meta", status:"construction", external:false,
+    name:"Cheyenne Campus", loc:"Cheyenne, Wyoming",
+    lat:41.14, lon:-104.82, capital:0.8, capLabel:"$800M+",
+    power:"Not disclosed", online:"2026", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"Meta's first Wyoming data center — a 715,000 sq ft campus that broke ground in 2024 to support expanding infrastructure needs.",
+    tension:"Sited for power and land economics in a low-cost, low-population grid. The site has drawn scrutiny over a contractor's alleged discharge of contaminated wastewater — a reminder that environmental/permitting execution is a schedule risk even on self-funded builds.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"GMP", v:null},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$800M+ investment, 715,000 sq ft", pill:"Direct"}
+    ],
+    sources:[
+      {t:"Redact — Meta data center list", u:"https://redact.dev/blog/full-list-of-known-and-upcoming-facebook-datacenters-as-of-may-2026"}
+    ]
+  },
+  {
+    id:"beaverdam", owner:"meta", status:"construction", external:false,
+    name:"Beaver Dam", loc:"Beaver Dam, Wisconsin",
+    lat:43.46, lon:-88.84, capital:1, capLabel:"$1B+",
+    power:"Not disclosed", online:"2027", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"A 700,000+ sq ft AI-optimized campus representing over $1B of investment, using closed-loop liquid cooling that requires zero water for most of the year.",
+    tension:"Cooling architecture is becoming a siting variable, not just an engineering one. A closed-loop design removes water availability from the permitting conversation — which in contested jurisdictions can matter more to schedule than capital cost.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$1B+ investment, balance sheet funded", pill:"Direct"},
+      {band:"Design", kind:"credit", party:"Closed-loop liquid cooling", note:"Zero water required for most of the year", pill:"Cooling"}
+    ],
+    sources:[
+      {t:"Redact — Meta data center list", u:"https://redact.dev/blog/full-list-of-known-and-upcoming-facebook-datacenters-as-of-may-2026"}
+    ]
+  },
+  {
+    id:"montgomery", owner:"meta", status:"construction", external:false,
+    name:"Montgomery", loc:"Montgomery County, Alabama",
+    lat:32.37, lon:-86.30, capital:1.5, capLabel:"$1.5B+",
+    power:"Not disclosed", online:"In construction", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"An AI-optimized campus of nearly 1.3 million sq ft, representing more than $1.5B of investment.",
+    tension:"Part of the second tier of AI-optimized campuses — large by any historical standard, but an order of magnitude below the titan clusters that are attracting outside capital.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$1.5B+ investment, balance sheet funded", pill:"Direct"}
+    ],
+    sources:[
+      {t:"Redact — Meta data center list", u:"https://redact.dev/blog/full-list-of-known-and-upcoming-facebook-datacenters-as-of-may-2026"}
+    ]
+  },
+  {
+    id:"rosemount", owner:"meta", status:"construction", external:false,
+    name:"Rosemount", loc:"Rosemount, Minnesota",
+    lat:44.74, lon:-93.13, capital:0.8, capLabel:"$800M+",
+    power:"Not disclosed", online:"2026", confidence:"announced",
+    structure:"Balance sheet + ground lease",
+    summary:"A 715,000 sq ft campus representing $800M+ of investment, located on University of Minnesota property.",
+    tension:"Sited on university land — an institutional landowner rather than a developer counterparty. Ground-lease structures with public or quasi-public landlords carry different control and term risk than fee ownership.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"Land", v:"Ground lease — University of Minnesota"},
+      {k:"Long-term owner", v:"Meta (improvements) / UMN (land)"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Landowner", name:"University of Minnesota"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$800M+ investment, 715,000 sq ft", pill:"Direct"},
+      {band:"Land", kind:"lease", party:"University of Minnesota property", note:"Institutional landowner rather than a developer counterparty", pill:"Land"}
+    ],
+    sources:[
+      {t:"Redact — Meta data center list", u:"https://redact.dev/blog/full-list-of-known-and-upcoming-facebook-datacenters-as-of-may-2026"}
+    ]
+  },
+  {
+    id:"jeffersonville", owner:"meta", status:"construction", external:false,
+    name:"Jeffersonville", loc:"Jeffersonville, Indiana",
+    lat:38.28, lon:-85.74, capital:0.8, capLabel:"$800M+",
+    power:"Not disclosed", online:"2026", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"A 700,000 sq ft AI-optimized campus representing more than $800M of investment — Meta's second Indiana site alongside Lebanon.",
+    tension:"Clustering within a single utility territory concentrates both interconnection leverage and grid-side exposure. Two campuses in one state changes the negotiating posture with the utility.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None announced"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$800M+ investment, 700,000 sq ft", pill:"Direct"}
+    ],
+    sources:[
+      {t:"Redact — Meta data center list", u:"https://redact.dev/blog/full-list-of-known-and-upcoming-facebook-datacenters-as-of-may-2026"}
+    ]
+  },
+  {
+    id:"loslunas", owner:"meta", status:"operating", external:false,
+    name:"Los Lunas", loc:"Los Lunas, New Mexico",
+    lat:34.81, lon:-106.73, capital:2, capLabel:"~$2B",
+    power:"Not disclosed", online:"Operating since 2019", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"Eight buildings representing nearly $2B of cumulative investment. The first phase opened in February 2019.",
+    tension:"The pre-AI template: phased, self-funded, built out over years. The contrast with Hyperion and El Paso is the whole story — capacity used to be added incrementally from cash flow, and now it is assembled in single financings larger than the entire prior campus.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"~$2B invested across eight buildings since 2019", pill:"Direct"}
+    ],
+    sources:[
+      {t:"Baxtel — Meta locations", u:"https://baxtel.com/data-centers/meta"}
+    ]
+  },
+
+  /* ---------------- PEER HYPERSCALE / AI ---------------- */
+  {
+    id:"stargate-abilene", owner:"peer", status:"construction", external:true,
+    name:"Stargate — Abilene", loc:"Abilene, Texas",
+    lat:32.45, lon:-99.73, capital:15, capLabel:"~$15B",
+    power:"1.2 GW", online:"Phased, operating 2025", confidence:"filed",
+    structure:"Dev JV + sale-leaseback",
+    summary:"The flagship Stargate site. Crusoe and Blue Owl Capital co-own the campus through a JV (with Primary Digital Infrastructure), lease it to Oracle, which rents the compute to OpenAI. A May 2025 round added $11.6B — $9.6B debt from JPMorgan plus $5B equity from Crusoe and Blue Owl — on top of an initial $7.1B JPMorgan construction loan.",
+    tension:"The purest expression of the new stack: a developer/credit JV owns the shell, a hyperscaler (Oracle) signs the lease, and the AI lab (OpenAI) is the ultimate user. The lease to Oracle is what makes $9.6B of bank debt financeable against a single site — the same single-tenant credit logic Meta uses at El Paso.",
+    terms:[
+      {k:"Equity", v:"$5B — Crusoe + Blue Owl"},
+      {k:"Debt", v:"$9.6B (JPMorgan) + $7.1B initial construction loan"},
+      {k:"Debt spread", v:null},
+      {k:"Lease term", v:"Long-term lease to Oracle"},
+      {k:"Rent commencement", v:"Phased from 2025 delivery"},
+      {k:"GMP", v:null},
+      {k:"Hyperscaler guarantee", v:"Oracle lease; OpenAI as end user"},
+      {k:"Long-term owner", v:"Crusoe / Blue Owl / Primary Digital JV"}
+    ],
+    parties:[
+      {role:"Developer / GP", name:"Crusoe; Primary Digital Infrastructure"},
+      {role:"Capital partner (LP)", name:"Blue Owl Capital"},
+      {role:"Lender", name:"JPMorgan (lead)"},
+      {role:"Tenant", name:"Oracle"},
+      {role:"End user", name:"OpenAI"},
+      {role:"Power", name:"On-site gas turbines"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Crusoe + Blue Owl", note:"$5B equity into the JV (May 2025 round)", pill:"JV"},
+      {band:"Debt", kind:"debt", party:"JPMorgan — $9.6B", note:"Phase-2 debt on top of an initial $7.1B construction loan", pill:"$9.6B"},
+      {band:"Offtake", kind:"lease", party:"Lease to Oracle", note:"Oracle operates and subleases compute to OpenAI", pill:"Oracle"},
+      {band:"End user", kind:"credit", party:"OpenAI", note:"Ultimate consumer of the compute capacity", pill:"OpenAI"}
+    ],
+    sources:[
+      {t:"DCD — Crusoe secures $11.6B", u:"https://www.datacenterdynamics.com/en/news/crusoe-secures-116bn-in-debt-and-equity-for-openais-stargate-data-center-campus-in-abilene-texas/"},
+      {t:"Bloomberg — $7.1B JPMorgan loan", u:"https://www.bloomberg.com/news/articles/2025-05-22/jpmorgan-leads-7-1-billion-loan-for-blue-owl-tied-data-center"},
+      {t:"CoStar — first Stargate construction loan", u:"https://www.costar.com/article/1387166843/first-stargate-data-center-project-lands-7-1-billion-construction-loan"}
+    ]
+  },
+  {
+    id:"stargate-michigan", owner:"peer", status:"construction", external:true,
+    name:"Stargate — Michigan (“The Barn”)", loc:"Saline Township, Michigan",
+    lat:42.17, lon:-83.78, capital:7, capLabel:"$7B",
+    power:"1 GW", online:"In development", confidence:"announced",
+    structure:"Developer-led (Related Digital + Oracle)",
+    summary:"A 1 GW, $7B campus developed by Related Digital with Oracle, announced October 2025 — three 550,000-sq-ft buildings on 250 acres. Part of OpenAI/Oracle/SoftBank's push to ~10 GW of Stargate capacity.",
+    tension:"Different developer, same template as Abilene: a real-estate sponsor (Related) builds and owns, Oracle contracts the capacity. The proliferation of named developers is the market's answer to scale — no single balance sheet can carry 10 GW.",
+    terms:[
+      {k:"Equity", v:"Related Digital / Oracle (undisclosed split)"},
+      {k:"Debt", v:null},
+      {k:"Lease term", v:"Oracle offtake"},
+      {k:"GMP", v:null},
+      {k:"Long-term owner", v:"Related Digital"}
+    ],
+    parties:[
+      {role:"Developer / GP", name:"Related Digital"},
+      {role:"Anchor / operator", name:"Oracle"},
+      {role:"End user", name:"OpenAI / Stargate"},
+      {role:"Lender", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Related Digital + Oracle", note:"3 × 550,000 sq ft on 250 acres", pill:"Dev"},
+      {band:"Offtake", kind:"lease", party:"Oracle / Stargate", note:"Capacity contracted to the Stargate program", pill:"1 GW"}
+    ],
+    sources:[
+      {t:"Data Center Frontier — five new Stargate sites", u:"https://www.datacenterfrontier.com/machine-learning/article/55319132/scaling-stargate-openais-five-new-us-data-centers-push-toward-10-gw-ai-infrastructure"},
+      {t:"CNBC — Stargate Michigan", u:"https://www.cnbc.com/2026/06/01/stargate-project-michigan-live-updates.html"}
+    ]
+  },
+  {
+    id:"stargate-milam", owner:"peer", status:"construction", external:true,
+    name:"Stargate — Milam County", loc:"Milam County, Texas",
+    lat:30.79, lon:-96.97, capital:5, capLabel:"Not disclosed",
+    power:"Multi-GW planned", online:"In development", confidence:"announced",
+    structure:"Powered-land partnership (SB Energy)",
+    summary:"One of five Stargate sites announced September 2025, developed with SB Energy — a SoftBank company providing powered infrastructure for a fast-build data center site.",
+    tension:"SB Energy's role is the tell: at this scale, the scarce asset is powered land, and a power developer, not a data center operator, anchors the deal. Interconnection and generation are increasingly the gating item, ahead of the shell.",
+    terms:[
+      {k:"Equity", v:"SoftBank / SB Energy"},
+      {k:"Debt", v:null},
+      {k:"Power", v:"SB Energy powered-land infrastructure"},
+      {k:"Long-term owner", v:"SB Energy / Stargate partners"}
+    ],
+    parties:[
+      {role:"Power developer / GP", name:"SB Energy (SoftBank)"},
+      {role:"Program", name:"OpenAI / Oracle / SoftBank (Stargate)"},
+      {role:"Lender", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"SB Energy (SoftBank)", note:"Powered infrastructure for a fast-build site", pill:"Power"},
+      {band:"Program", kind:"credit", party:"Stargate", note:"Part of the ~10 GW / $400B+ Stargate commitment", pill:"Stargate"}
+    ],
+    sources:[
+      {t:"OpenAI — five new Stargate sites", u:"https://openai.com/index/five-new-stargate-sites/"},
+      {t:"Axios — Stargate adds five US sites", u:"https://www.axios.com/2025/09/23/openai-stargate-oracle-softbank-texas"}
+    ]
+  },
+  {
+    id:"colossus", owner:"peer", status:"operating", external:true,
+    name:"Colossus (xAI)", loc:"Memphis, Tennessee",
+    lat:35.06, lon:-90.03, capital:10, capLabel:"$10B debt + equity",
+    power:"150 MW+ (expanding)", online:"Operating since 2024", confidence:"reported",
+    structure:"Corporate debt secured on GPUs",
+    summary:"xAI raised a combined $10B in debt and equity in 2025, including a ~$5B facility arranged by Morgan Stanley — a term loan B, a fixed-rate term loan, and senior secured notes. The Colossus cluster near Memphis housed ~200,000 GPUs by mid-2025.",
+    tension:"The collateral is the twist: lenders reportedly gained the right to take over Colossus and re-let it to other AI companies on default. Financing a depreciating GPU cluster is a fundamentally different credit than a leased building — the asset's residual value, not a tenant's covenant, backstops the debt.",
+    terms:[
+      {k:"Equity", v:"Part of $10B combined raise"},
+      {k:"Debt", v:"~$5B (TLB + fixed term loan + senior secured notes)"},
+      {k:"Debt spread", v:"Oversubscribed; terms not public"},
+      {k:"Collateral", v:"Colossus GPU cluster (step-in rights)"},
+      {k:"GMP", v:null},
+      {k:"Long-term owner", v:"xAI"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"xAI"},
+      {role:"Lead arranger", name:"Morgan Stanley"},
+      {role:"Lenders", name:"Global debt investors (syndicate)"},
+      {role:"Tenant / user", name:"xAI (self)"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"xAI", note:"Equity portion of the $10B combined raise", pill:"Sponsor"},
+      {band:"Debt", kind:"debt", party:"~$5B Morgan Stanley facility", note:"Term loan B, fixed-rate term loan, senior secured notes", pill:"$5B"},
+      {band:"Collateral", kind:"credit", party:"Colossus GPU cluster", note:"Lenders can step in and re-let the cluster on default", pill:"Step-in"}
+    ],
+    sources:[
+      {t:"DCD — xAI raises $10B", u:"https://www.datacenterdynamics.com/en/news/elon-musks-xai-raises-10bn-in-debt-and-equity-for-data-center-development/"},
+      {t:"Fortune — $5B Morgan Stanley facility", u:"https://fortune.com/2025/06/02/elon-musk-xai-startup-5-billion-morgan-stanley-colossus-data-center"},
+      {t:"CNBC — xAI $10B raise", u:"https://www.cnbc.com/2025/07/01/elon-musk-xai-raises-10-billion-in-debt-and-equity.html"}
+    ]
+  },
+  {
+    id:"rainier", owner:"peer", status:"operating", external:false,
+    name:"Project Rainier (AWS)", loc:"New Carlisle, Indiana",
+    lat:41.70, lon:-86.51, capital:11, capLabel:"$11B",
+    power:"2.25 GW (planned)", online:"Operating Oct 2025", confidence:"announced",
+    structure:"Balance sheet + anchor customer",
+    summary:"Amazon's $11B AI campus, opened October 2025, built around ~500,000 of its own Trainium2 chips dedicated to a single customer — Anthropic. Eighteen buildings operating, fourteen more under construction; 32 buildings / ~6.5M sq ft at full scale.",
+    tension:"The counterpoint to the JV wave: the largest AI campuses can still be built on a hyperscaler's own balance sheet when the chips and the customer are captive. Anthropic functions as the anchor tenant, but there is no external project capital — the credit lives at Amazon, not at the site.",
+    terms:[
+      {k:"Equity", v:"Amazon 100% (balance sheet)"},
+      {k:"Debt", v:"None at project level"},
+      {k:"Anchor customer", v:"Anthropic (Trainium capacity)"},
+      {k:"GMP", v:null},
+      {k:"Long-term owner", v:"Amazon (AWS)"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Amazon (AWS)"},
+      {role:"Anchor customer", name:"Anthropic"},
+      {role:"Silicon", name:"AWS Trainium2 / Trainium3"},
+      {role:"Capital partner", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Amazon — 100%", note:"$11B on balance sheet; ~500k Trainium2 chips", pill:"Direct"},
+      {band:"Offtake", kind:"lease", party:"Anthropic", note:"Single anchor customer for the cluster's compute", pill:"Anchor"}
+    ],
+    sources:[
+      {t:"CNBC — Amazon opens $11B Project Rainier", u:"https://www.cnbc.com/2025/10/29/amazon-opens-11-billion-ai-data-center-project-rainier-in-indiana.html"},
+      {t:"Data Center Knowledge — Rainier / Anthropic", u:"https://www.datacenterknowledge.com/supercomputers/project-rainer-aws-anthropic-complete-massive-ai-supercomputing-cluster"}
+    ]
+  },
+  {
+    id:"fairwater", owner:"peer", status:"operating", external:false,
+    name:"Fairwater (Microsoft)", loc:"Mount Pleasant, Wisconsin",
+    lat:42.70, lon:-87.90, capital:7.3, capLabel:"$7.3B",
+    power:"2.6 GW demand (corridor)", online:"Operating Jun 2026", confidence:"announced",
+    structure:"Balance sheet",
+    summary:"Microsoft's Fairwater campus — a $7.3B total investment (after a $3.3B first leg and a $4B expansion) that the company calls its most powerful AI data center. First facility became operational June 2026; a similarly sized second build follows over ~3 years.",
+    tension:"Like AWS Rainier, this is a balance-sheet build — no outside project capital. The scarce input here is power: the utility (WEC) disclosed ~2.6 GW of new demand from Microsoft's I-94 corridor buildout, which is the real constraint on the schedule.",
+    terms:[
+      {k:"Equity", v:"Microsoft 100% (balance sheet)"},
+      {k:"Debt", v:"None at project level"},
+      {k:"GMP", v:null},
+      {k:"Power", v:"~2.6 GW new demand (WEC Energy)"},
+      {k:"Long-term owner", v:"Microsoft"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Microsoft"},
+      {role:"Power provider", name:"WEC Energy Group"},
+      {role:"Tenant / user", name:"Microsoft (Azure AI)"},
+      {role:"Capital partner", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Microsoft — 100%", note:"$7.3B total ($3.3B first leg + $4B expansion)", pill:"Direct"},
+      {band:"Power", kind:"credit", party:"WEC Energy Group", note:"~2.6 GW of new corridor demand", pill:"2.6 GW"}
+    ],
+    sources:[
+      {t:"DCD — Microsoft raises WI investment to $7.3B", u:"https://www.datacenterdynamics.com/en/news/microsoft-increases-wisconsin-data-center-investment-to-73bn-says-fairwater-site-will-be-worlds-most-powerful-data-center/"},
+      {t:"Data Center Knowledge — Fairwater operational", u:"https://www.datacenterknowledge.com/data-center-construction/microsoft-s-wisconsin-ai-campus-moves-from-construction-to-operations"}
+    ]
+  },
+  {
+    id:"coreweave", owner:"peer", status:"operating", external:true,
+    name:"CoreWeave (platform)", loc:"Roseland, New Jersey (HQ)",
+    lat:40.82, lon:-74.29, capital:7.5, capLabel:"$7.5B debt facility",
+    power:"Multi-site fleet", online:"Operating platform", confidence:"announced",
+    structure:"Asset-backed debt on GPU fleet",
+    summary:"AI cloud provider financed largely through debt secured on its GPU fleet and customer contracts. A $7.5B facility (May 2024) led by Blackstone and Magnetar followed an earlier $2.3B facility — with Coatue, Carlyle, CDPQ, BlackRock, PIMCO, Eldridge and others participating.",
+    tension:"The template for financing compute rather than buildings: the collateral is GPUs plus contracted revenue, and a wide club of private-credit and infrastructure lenders syndicates the risk. When banks won't hold single-name AI exposure, this is where it goes.",
+    terms:[
+      {k:"Equity", v:"VC + public (post-IPO)"},
+      {k:"Debt", v:"$7.5B (2024) + $2.3B (2023) facilities"},
+      {k:"Debt spread", v:null},
+      {k:"Collateral", v:"GPU fleet + customer contracts"},
+      {k:"Long-term owner", v:"CoreWeave (public)"}
+    ],
+    parties:[
+      {role:"Sponsor / operator", name:"CoreWeave"},
+      {role:"Lead lenders", name:"Blackstone; Magnetar"},
+      {role:"Participants", name:"Coatue, Carlyle, CDPQ, BlackRock, PIMCO, DigitalBridge Credit, Eldridge"},
+      {role:"Customers", name:"Microsoft and other AI labs"}
+    ],
+    stack:[
+      {band:"Debt", kind:"debt", party:"Blackstone / Magnetar — $7.5B", note:"Led the May 2024 facility with a broad private-credit club", pill:"$7.5B"},
+      {band:"Debt", kind:"debt", party:"Earlier $2.3B facility", note:"Magnetar + Blackstone Tactical Opportunities (2023)", pill:"$2.3B"},
+      {band:"Collateral", kind:"credit", party:"GPU fleet + contracts", note:"Asset-backed against compute and contracted revenue", pill:"ABL"}
+    ],
+    sources:[
+      {t:"Blackstone — $7.5B CoreWeave facility", u:"https://www.blackstone.com/news/press/coreweave-secures-7-5-billion-debt-financing-facility-led-by-blackstone-and-magnetar/"},
+      {t:"DCD — CoreWeave $7.5B debt", u:"https://www.datacenterdynamics.com/en/news/ai-cloud-firm-coreweave-raises-75-billion-in-debt-financing/"}
+    ]
+  },
+  {
+    id:"digitalrealty", owner:"peer", status:"construction", external:true,
+    name:"Digital Realty / Blackstone JV", loc:"Northern Virginia",
+    lat:39.04, lon:-77.49, capital:7, capLabel:"$7B",
+    power:"Not disclosed", online:"In development", confidence:"announced",
+    structure:"Development JV",
+    summary:"A $7B hyperscale development joint venture between Digital Realty and Blackstone, targeting key markets including Northern Virginia and Silicon Valley.",
+    tension:"The developer–capital partner archetype in its purest form: an operating platform that needs repeatable funding pairs with an institutional investor that wants exposure. The recurring friction in these vehicles is not returns but governance — valuation, funding milestones and exit rights.",
+    terms:[
+      {k:"Equity", v:"Digital Realty (GP) / Blackstone (LP)"},
+      {k:"Debt", v:null},
+      {k:"Lease term", v:"Long-term NNN to hyperscale tenants"},
+      {k:"Long-term owner", v:"Digital Realty / Blackstone JV"}
+    ],
+    parties:[
+      {role:"Operating partner / GP", name:"Digital Realty"},
+      {role:"Capital partner / LP", name:"Blackstone"},
+      {role:"Tenant", name:"Hyperscale (IG) tenants"},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Blackstone", note:"Institutional capital partner (LP)", pill:"LP"},
+      {band:"Equity", kind:"equity", party:"Digital Realty", note:"Operating partner and developer (GP)", pill:"GP"},
+      {band:"Offtake", kind:"lease", party:"Hyperscale tenant leases", note:"Long-term leases to investment-grade tenants underwrite the vehicle", pill:"NNN"}
+    ],
+    sources:[
+      {t:"A&O Shearman — data center JV structures", u:"https://www.aoshearman.com/en/insights/data-center-insights/joint-ventures-powering-the-data-center-build-out-three-partnerships-reshaping-the-market"}
+    ]
+  },
+
+  /* ---------------- SOLD / RECAPITALIZED (long-term owners) ---------------- */
+  {
+    id:"aligned", owner:"peer", status:"sold", external:true,
+    name:"Aligned Data Centers", loc:"Dallas, Texas (platform HQ)",
+    lat:32.78, lon:-96.80, capital:40, capLabel:"$40B acquisition",
+    power:"6.4 GW operational + planned", online:"Operating platform", confidence:"filed",
+    structure:"Platform acquisition (all-equity)",
+    summary:"In July 2026, AIP, MGX and BlackRock's GIP closed a $40B acquisition of 100% of Aligned Data Centers from Macquarie-managed funds — one of the largest private digital-infrastructure deals ever — plus a further $5B of growth capital. Aligned spans 51 campuses and 6.4 GW.",
+    tension:"Capital is no longer content to fund projects — it is buying the operating platforms outright. Owning the developer means owning the powered-land pipeline and the delivery team, which is the actual scarce asset. The buyers (BlackRock, Microsoft, NVIDIA-backed AIP, MGX) are also customers and suppliers of the AI build-out.",
+    terms:[
+      {k:"Equity", v:"$40B, 100% acquired (all-equity)"},
+      {k:"Growth capital", v:"+$5B committed"},
+      {k:"Seller", v:"Macquarie Asset Management funds"},
+      {k:"Portfolio", v:"51 campuses, 6.4 GW"},
+      {k:"Long-term owner", v:"AIP / MGX / BlackRock GIP"}
+    ],
+    parties:[
+      {role:"Acquirers (LPs)", name:"AI Infrastructure Partnership; MGX; BlackRock GIP"},
+      {role:"Seller", name:"Macquarie Asset Management funds"},
+      {role:"Target / operator", name:"Aligned Data Centers"},
+      {role:"Management", name:"Andrew Schaap (CEO), retained"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"AIP / MGX / BlackRock GIP", note:"Acquired 100% of the platform for $40B (all-equity)", pill:"100%"},
+      {band:"Growth", kind:"equity", party:"+$5B growth capital", note:"Committed to expand capacity for AI workloads", pill:"+$5B"},
+      {band:"Asset", kind:"credit", party:"Aligned operating platform", note:"51 campuses, 6.4 GW, powered-land pipeline and delivery team", pill:"Platform"}
+    ],
+    sources:[
+      {t:"Data Center Frontier — $40B Aligned deal", u:"https://www.datacenterfrontier.com/hyperscale/article/55323360/blackrock-led-consortium-to-acquire-aligned-data-centers-in-40-billion-ai-infrastructure-deal"},
+      {t:"GIP — acquisition of Aligned", u:"https://www.global-infra.com/news/ai-infrastructure-partnership-aip-mgx-and-blackrocks-global-infrastructure-partners-gip-to-acquire-all-equity-in-aligned-data-centers/"},
+      {t:"The National — +$5B commitment", u:"https://www.thenationalnews.com/future/technology/2026/07/21/blackrock-mgx-consortium-commits-5bn-for-aligned-data-centres-after-closing-acquisition/"}
+    ]
+  },
+  {
+    id:"cyrusone", owner:"peer", status:"sold", external:true,
+    name:"CyrusOne", loc:"Dallas, Texas (platform HQ)",
+    lat:32.95, lon:-96.89, capital:15, capLabel:"$15B take-private",
+    power:"Global fleet", online:"Operating platform", confidence:"filed",
+    structure:"Take-private (REIT)",
+    summary:"KKR and Global Infrastructure Partners took CyrusOne private for ~$15B ($90.50/share incl. assumed debt) in a deal that closed in 2022 — at the time the largest M&A transaction in data center history.",
+    tension:"The first of the mega take-privates that turned public data center REITs into privately owned infrastructure. Institutional owners with long horizons and cheaper cost of capital displaced public-market shareholders — the same logic now playing out at platform scale with Aligned.",
+    terms:[
+      {k:"Equity", v:"$90.50/share, all-cash"},
+      {k:"Enterprise value", v:"~$15B incl. assumed debt"},
+      {k:"Seller", v:"Public shareholders (NASDAQ: CONE)"},
+      {k:"Long-term owner", v:"KKR + Global Infrastructure Partners"}
+    ],
+    parties:[
+      {role:"Acquirers (LPs)", name:"KKR; Global Infrastructure Partners"},
+      {role:"Target / operator", name:"CyrusOne"},
+      {role:"Seller", name:"Public shareholders"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"KKR + GIP", note:"$90.50/share all-cash take-private", pill:"100%"},
+      {band:"Debt", kind:"debt", party:"Assumed debt", note:"Rolled into ~$15B enterprise value", pill:"EV"},
+      {band:"Asset", kind:"credit", party:"CyrusOne platform", note:"Global data center fleet and development pipeline", pill:"Platform"}
+    ],
+    sources:[
+      {t:"DCD — KKR & GIP acquire CyrusOne for $15bn", u:"https://www.datacenterdynamics.com/en/news/confirmed-kkr-gip-acquire-cyrusone-for-15bn-american-tower-acquires-coresite/"},
+      {t:"Data Center Frontier — CyrusOne $15B", u:"https://www.datacenterfrontier.com/featured/article/11427810/kkr-gip-to-acquire-cyrusone-in-blockbuster-15-billion-deal"}
+    ]
+  },
+  {
+    id:"qts", owner:"peer", status:"sold", external:true,
+    name:"QTS Realty", loc:"Overland Park, Kansas (HQ)",
+    lat:38.98, lon:-94.68, capital:10, capLabel:"$10B take-private",
+    power:"7M+ sq ft", online:"Operating platform", confidence:"filed",
+    structure:"Take-private (REIT)",
+    summary:"Blackstone took QTS Realty Trust private for ~$10B, closing August 2021 — acquiring 7M+ sq ft of data center space across North America and Europe. QTS has since become one of the most aggressive hyperscale developers under Blackstone ownership.",
+    tension:"The deal that put Blackstone at the center of the build-out. Private ownership let QTS invest through cycles without quarterly earnings pressure — and gave Blackstone a captive development platform to pair with its infrastructure and credit funds.",
+    terms:[
+      {k:"Equity", v:"~$10B, all-cash"},
+      {k:"Seller", v:"Public shareholders (NYSE: QTS)"},
+      {k:"Portfolio", v:"7M+ sq ft, US + Europe"},
+      {k:"Long-term owner", v:"Blackstone (Infrastructure + funds)"}
+    ],
+    parties:[
+      {role:"Acquirer (LP)", name:"Blackstone"},
+      {role:"Target / operator", name:"QTS Realty Trust"},
+      {role:"Seller", name:"Public shareholders"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Blackstone", note:"~$10B all-cash take-private (Aug 2021)", pill:"100%"},
+      {band:"Asset", kind:"credit", party:"QTS platform", note:"7M+ sq ft; now a core Blackstone development engine", pill:"Platform"}
+    ],
+    sources:[
+      {t:"Data Center Knowledge — Blackstone's $10B QTS deal", u:"https://www.datacenterknowledge.com/operations-and-management/blackstone-s-10b-deal-to-buy-data-center-giant-qts-the-context"}
+    ]
+  },
+  {
+    id:"switch", owner:"peer", status:"sold", external:true,
+    name:"Switch", loc:"Las Vegas, Nevada (HQ)",
+    lat:36.10, lon:-115.10, capital:11, capLabel:"$11B take-private",
+    power:"Multi-campus", online:"Operating platform", confidence:"filed",
+    structure:"Take-private (REIT)",
+    summary:"DigitalBridge and IFM Investors took Switch private for $11B, closing December 2022. DigitalBridge holds ~55.8%, IFM ~37.2%, management ~7.0%.",
+    tension:"A pension manager (IFM) sitting alongside a digital-infrastructure specialist (DigitalBridge) is the archetype of the new ownership base: patient institutional capital seeking long-duration, inflation-linked cash flows, paired with an operator that knows how to build.",
+    terms:[
+      {k:"Equity", v:"DigitalBridge 55.8% / IFM 37.2% / mgmt 7%"},
+      {k:"Enterprise value", v:"$11B"},
+      {k:"Seller", v:"Public shareholders (NYSE: SWCH)"},
+      {k:"Long-term owner", v:"DigitalBridge + IFM Investors"}
+    ],
+    parties:[
+      {role:"Acquirers (LPs)", name:"DigitalBridge; IFM Investors"},
+      {role:"Target / operator", name:"Switch"},
+      {role:"Seller", name:"Public shareholders"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"DigitalBridge — 55.8%", note:"Lead sponsor and operator", pill:"GP"},
+      {band:"Equity", kind:"equity", party:"IFM Investors — 37.2%", note:"Pension-backed long-term capital", pill:"LP"},
+      {band:"Asset", kind:"credit", party:"Switch platform", note:"Prime campuses across the US", pill:"Platform"}
+    ],
+    sources:[
+      {t:"DCD — DigitalBridge & IFM complete Switch deal", u:"https://www.datacenterdynamics.com/en/news/digitalbridge-ifm-complete-switch-inc-acquisition/"},
+      {t:"DigitalBridge — $11B Switch take-private", u:"https://www.digitalbridge.com/news/2022-05-11-switch-to-be-taken-private-by-digitalbridge-investment-management-and-ifm-in-11-billion-transaction"}
+    ]
+  },
+  {
+    id:"vantage", owner:"peer", status:"sold", external:true,
+    name:"Vantage Data Centers", loc:"Denver, Colorado (HQ)",
+    lat:39.74, lon:-104.99, capital:9.2, capLabel:"$9.2B equity raise",
+    power:"Multi-GW incl. $25B TX campus", online:"Operating platform", confidence:"filed",
+    structure:"Equity recap + ABS issuer",
+    summary:"DigitalBridge and Silver Lake led a $9.2B equity investment in Vantage (completed 2024). Vantage is a serial securitizer — it issued the first North American, EMEA and APAC data center ABS — and is developing a $25B Texas “Frontier” mega-campus.",
+    tension:"Vantage shows how the two capital layers combine: a large private equity recap sets the ownership, while asset-backed securitization taps the bond market against stabilized, leased campuses. It is the developer that most resembles a capital-markets machine.",
+    terms:[
+      {k:"Equity", v:"$9.2B — DigitalBridge + Silver Lake (2024)"},
+      {k:"Debt", v:"Serial ABS / securitized notes (multi-region)"},
+      {k:"Development", v:"$25B Texas “Frontier” mega-campus"},
+      {k:"Long-term owner", v:"DigitalBridge + Silver Lake"}
+    ],
+    parties:[
+      {role:"Lead investors (LPs)", name:"DigitalBridge; Silver Lake"},
+      {role:"Operator / GP", name:"Vantage Data Centers"},
+      {role:"Debt markets", name:"ABS / securitized noteholders"}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"DigitalBridge + Silver Lake", note:"$9.2B equity investment (2024)", pill:"Recap"},
+      {band:"Debt", kind:"debt", party:"Asset-backed securitization", note:"First data center ABS in North America, EMEA and APAC", pill:"ABS"},
+      {band:"Asset", kind:"credit", party:"Vantage platform", note:"Incl. the $25B Texas Frontier mega-campus", pill:"Platform"}
+    ],
+    sources:[
+      {t:"DigitalBridge — $9.2B Vantage investment", u:"https://www.digitalbridge.com/news/2024-06-13-vantage-data-centers-completes-92-billion-equity-investment-led-by-digitalbridge-and-silver-lake"},
+      {t:"Vantage — first euro data center ABS", u:"https://vantage-dc.com/news/vantage-data-centers-completes-industrys-first-euro-based-data-center-asset-backed-securitization-abs-with-e640m-transaction/"}
+    ]
+  }
+];
+
+const PLATFORMS = [
+  {name:"Blue Owl Capital", vehicle:"US digital infrastructure venture", note:"Anchor capital partner on Meta's Hyperion JV and a co-owner of Stargate Abilene. Flexible private-capital financing for hyperscale developers."},
+  {name:"Blackstone", vehicle:"$25B+ Infrastructure Partners AUM", note:"Owns QTS; bought AirTrunk (A$24B, with CPP); leads CoreWeave debt; JV with Digital Realty. The most active single owner/lender in the build-out."},
+  {name:"BlackRock / GIP & AIP", vehicle:"Global Infrastructure Partners + AI Infrastructure Partnership", note:"Co-acquirer of Aligned ($40B) and CyrusOne ($15B); marketed Meta's $12B+ El Paso bond. AIP is BlackRock + GIP + MGX + Microsoft + NVIDIA."},
+  {name:"MGX", vehicle:"Abu Dhabi AI investment vehicle", note:"Co-acquirer of Aligned Data Centers; sovereign-scale capital pairing with BlackRock and GIP across AI infrastructure."},
+  {name:"Pimco", vehicle:"Private credit", note:"Issued much of the debt behind Meta's Hyperion JV and has anchored large single-site AI financings when banks step back."},
+  {name:"KKR", vehicle:"~$10B data center platform + CyrusOne", note:"Co-owns CyrusOne (with GIP) and is building a dedicated data center / power company. Adam Selipsky (ex-AWS CEO) leads the new platform."},
+  {name:"DigitalBridge", vehicle:"$11.7B+ digital infra funds", note:"Owns Switch (with IFM) and recapitalized Vantage (with Silver Lake). Also a CoreWeave credit participant. A pure-play digital infrastructure owner-operator."},
+  {name:"Silver Lake", vehicle:"Tech-focused private equity", note:"Co-led the $9.2B Vantage recapitalization — tech PE moving into physical AI infrastructure."},
+  {name:"Magnetar Capital", vehicle:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed debt facilities — a specialist in financing compute assets rather than buildings."},
+  {name:"CPP Investments", vehicle:"Pension capital", note:"12% of AirTrunk alongside Blackstone; also entering development directly via a JV with Goodman Group. Patient, long-duration ownership."},
+  {name:"Brookfield Asset Management", vehicle:"$10B AI Infrastructure Fund", note:"Targeting up to $100B across digital infrastructure; acquired Data4 in Europe and partnering on AI-ready facilities."},
+  {name:"SB Energy / SoftBank", vehicle:"Powered-land developer", note:"Provides powered infrastructure for Stargate sites (e.g. Milam County). A power developer anchoring data center deals — the scarce input at scale."}
+];
+
+/* ============================ MAP ============================ */
+const STATUS_COL = {construction:"#F2A33C", operating:"#4E9C8F", sold:"#B889D6"};
+const META_COL = "#4A9EE7";
+function colorFor(d){ return d.owner==="meta" ? META_COL : STATUS_COL[d.status]; }
+
+let activeFilter = "all";
+
+function filtered(){
+  if(activeFilter==="all") return DEALS;
+  if(activeFilter==="meta") return DEALS.filter(d=>d.owner==="meta");
+  if(activeFilter==="external") return DEALS.filter(d=>d.external);
+  return DEALS.filter(d=>d.status===activeFilter);
+}
+
+function sizeFor(c){ return Math.max(9, Math.sqrt(c)*6.4); }
+
+function drawMap(){
+  const rows = filtered();
+  const trace = {
+    type:"scattergeo",
+    locationmode:"USA-states",
+    lat: rows.map(d=>d.lat),
+    lon: rows.map(d=>d.lon),
+    text: rows.map(d=>`${d.name}<br>${d.loc}<br>${d.capLabel} · ${d.structure}`),
+    customdata: rows.map(d=>d.id),
+    hoverinfo:"text",
+    hoverlabel:{
+      bgcolor:"#141E29", bordercolor:"#25333F",
+      font:{family:"IBM Plex Mono, monospace", size:11.5, color:"#D9E0E6"}
+    },
+    mode:"markers",
+    marker:{
+      size: rows.map(d=>sizeFor(d.capital)),
+      color: rows.map(d=>colorFor(d)),
+      opacity:0.9,
+      line:{ width: rows.map(d=>d.id==="elpaso"||d.id==="hyperion"?2:1),
+             color: rows.map(d=>d.owner==="meta"?"#0E1620":"#0E1620") }
+    }
+  };
+  const layout = {
+    geo:{
+      scope:"usa", projection:{type:"albers usa"},
+      bgcolor:"rgba(0,0,0,0)",
+      showland:true, landcolor:"#16212C",
+      subunitcolor:"#26343F", subunitwidth:0.9,
+      showlakes:false, showframe:false,
+      coastlinecolor:"#2C3C49", coastlinewidth:0.9,
+      showcountries:false
+    },
+    paper_bgcolor:"rgba(0,0,0,0)",
+    margin:{t:8,b:8,l:8,r:8},
+    dragmode:false
+  };
+  Plotly.newPlot("map", [trace], layout, {displayModeBar:false, responsive:true})
+    .then(gd=>{
+      gd.removeAllListeners && gd.removeAllListeners("plotly_click");
+      gd.on("plotly_click", ev=>{
+        const id = ev.points[0].customdata;
+        openDeal(DEALS.find(d=>d.id===id));
+      });
+    });
+}
+
+/* ============================ DOSSIER ============================ */
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+const STATUS_LABEL = {construction:"Under construction", operating:"Recently delivered", sold:"Sold / recapitalized"};
+
+function openDeal(d){
+  if(!d) return;
+  const tagClass = d.owner==="meta" ? "tag-meta" : ("tag-"+d.status);
+  const tagText  = d.owner==="meta" ? "Meta" : (d.owner==="peer" ? "Peer" : "");
+  const statusText = STATUS_LABEL[d.status] || "";
+
+  const terms = (d.terms||[]).map(t=>`
+    <div class="party">
+      <span class="party-role">${esc(t.k)}</span>
+      <span class="party-name${t.v?"":" nd"}">${t.v?esc(t.v):"Not publicly disclosed"}</span>
+    </div>`).join("");
+
+  const parties = d.parties.map(p=>`
+    <div class="party">
+      <span class="party-role">${esc(p.role)}</span>
+      <span class="party-name${p.name?"":" nd"}">${p.name?esc(p.name):"Not publicly disclosed"}</span>
+    </div>`).join("");
+
+  const oneline = d.stack.map(s=>`
+    <div class="ol-row" data-kind="${esc(s.kind)}">
+      <div class="ol-rail">
+        <span class="ol-band">${esc(s.band)}</span>
+        <span class="ol-tick"></span>
+        <span class="ol-node"></span>
+      </div>
+      <div class="ol-card">
+        ${s.pill?`<span class="ol-pill">${esc(s.pill)}</span>`:""}
+        <div class="ol-party">${esc(s.party)}</div>
+        <div class="ol-note">${esc(s.note)}</div>
+      </div>
+    </div>`).join("");
+
+  const sources = d.sources.map(s=>`<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.t)} ↗</a>`).join("");
+
+  document.getElementById("dossier").innerHTML = `
+    <div class="dsr-head">
+      <span class="dsr-tag ${tagClass}">${tagText} · ${esc(statusText)} · ${esc(d.structure)}</span>
+      <h3 class="dsr-name">${esc(d.name)}</h3>
+      <div class="dsr-loc">${esc(d.loc)} · ${d.lat.toFixed(2)}, ${d.lon.toFixed(2)}</div>
+    </div>
+    <div class="dsr-metrics">
+      <div class="met"><span class="met-k">Capital</span><span class="met-v">${esc(d.capLabel)}</span></div>
+      <div class="met"><span class="met-k">Capacity</span><span class="met-v">${esc(d.power)}</span></div>
+      <div class="met"><span class="met-k">Online</span><span class="met-v">${esc(d.online)}</span></div>
+    </div>
+    <div class="dsr-body">
+      <div class="sect">
+        <div class="sect-h">Structure</div>
+        <p>${esc(d.summary)}</p>
+      </div>
+      <div class="sect">
+        <div class="sect-h">Deal terms</div>
+        ${terms}
+      </div>
+      <div class="sect">
+        <div class="sect-h">Capital stack</div>
+        <div class="oneline">${oneline}</div>
+      </div>
+      <div class="sect">
+        <div class="sect-h">What to notice</div>
+        <p>${esc(d.tension)}</p>
+      </div>
+      <div class="sect">
+        <div class="sect-h">Parties</div>
+        ${parties}
+      </div>
+      <div class="sect">
+        <div class="sect-h">Sourcing · <span class="conf conf-${d.confidence}">${d.confidence}</span></div>
+        <div class="srcs">${sources}</div>
+      </div>
+    </div>`;
+  document.getElementById("dossier").scrollTop = 0;
+}
+
+/* ============================ PLATFORMS ============================ */
+document.getElementById("pgrid").innerHTML = PLATFORMS.map(p=>`
+  <div class="pcard">
+    <div class="pcard-name">${esc(p.name)}</div>
+    <div class="pcard-vehicle">${esc(p.vehicle)}</div>
+    <div class="pcard-note">${esc(p.note)}</div>
+  </div>`).join("");
+
+/* ============================ CONTROLS ============================ */
+document.querySelectorAll(".chip").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed","false"));
+    btn.setAttribute("aria-pressed","true");
+    activeFilter = btn.dataset.filter;
+    drawMap();
+  });
+});
+
+drawMap();
+openDeal(DEALS.find(d=>d.id==="hyperion"));
+</script>
+</body>
+</html>
