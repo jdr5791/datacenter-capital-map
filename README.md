@@ -6,9 +6,11 @@ Click any node to open a deal dossier showing the **capital stack** (equity vs. 
 
 **Live site:** https://jdr5791.github.io/datacenter-capital-map/
 
+Covers **41 projects**, including **all 28 of Meta's US data center locations** (per [datacenters.atmeta.com](https://datacenters.atmeta.com/us-locations/)).
+
 ## What it covers
 
-- **Meta** — Hyperion (Blue Owl JV + sale-leaseback), El Paso (project bond), and the balance-sheet campuses (Prometheus, Lebanon, Los Lunas, etc.)
+- **Meta** — all 28 US campuses: Hyperion (Blue Owl JV + sale-leaseback) and El Paso (project bond) are the only two with external capital; the other 26 (Prometheus, Altoona, Prineville, Sarpy, etc.) are wholly-owned balance-sheet builds
 - **Peer hyperscale / AI** — Stargate/Abilene (Crusoe/Oracle/OpenAI), xAI Colossus, AWS Project Rainier, Microsoft Fairwater, Stargate Michigan/Milam, CoreWeave, Digital Realty × Blackstone
 - **Sold / recapitalized platforms** (long-term owners) — Aligned ($40B, AIP/MGX/BlackRock GIP), CyrusOne (KKR/GIP), QTS (Blackstone), Switch (DigitalBridge/IFM), Vantage (DigitalBridge/Silver Lake)
 

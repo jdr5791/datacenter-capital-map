@@ -1102,6 +1102,62 @@ const DEALS = [
   }
 ];
 
+/* ---- Established / wholly-owned Meta campuses from datacenters.atmeta.com ----
+   Added so the map carries Meta's full US fleet. All balance-sheet funded;
+   figures are announced site investments (see per-deal sources). ------------- */
+function metaBalanceSheet(m){
+  return {
+    id:m.id, owner:"meta", status:m.status, external:false,
+    name:m.name, loc:m.loc, lat:m.lat, lon:m.lon,
+    capital:m.capital, capLabel:m.capLabel,
+    power:m.power||"Not disclosed", online:m.online, confidence:"announced",
+    structure:"Balance sheet",
+    summary:m.note,
+    tension:"One of Meta's wholly-owned, balance-sheet-funded campuses. Meta has kept nearly its entire US fleet on its own balance sheet — only Hyperion (the Blue Owl JV) and El Paso (a project bond) bring in external capital, which is exactly what makes those two structures worth studying.",
+    terms:[
+      {k:"Equity", v:"Meta 100% (balance sheet)"},
+      {k:"Debt", v:"None"},
+      {k:"Structure", v:"Wholly owned"},
+      {k:"Hyperscaler guarantee", v:"n/a"},
+      {k:"Long-term owner", v:"Meta Platforms"}
+    ],
+    parties:[
+      {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"Tenant", name:"Meta Platforms"},
+      {role:"Capital partner", name:null},
+      {role:"General contractor", name:null}
+    ],
+    stack:[
+      {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:m.capLabel+" · balance-sheet funded, no external capital partner", pill:"Direct"}
+    ],
+    sources:[
+      {t:"Meta — US data center locations", u:"https://datacenters.atmeta.com/us-locations/"},
+      {t:"Meta — jobs & infrastructure (investment by site)", u:"https://datacenters.atmeta.com/jobs-infrastructure-usa/"}
+    ]
+  };
+}
+const META_BS = [
+  {id:"prineville", name:"Prineville", loc:"Prineville, Oregon", lat:44.30, lon:-120.83, capital:2, capLabel:"Multi-phase since 2011", online:"Operating since 2011", status:"operating", note:"Meta's first data center campus, in continuous multi-phase expansion since 2011 — the origin of the balance-sheet build model."},
+  {id:"altoona", name:"Altoona", loc:"Altoona, Iowa", lat:41.64, lon:-93.46, capital:10, capLabel:"$10B+ (AI expansion)", online:"Operating + expanding", status:"construction", note:"A major general-compute campus given a $10B+ AI-focused expansion announced in 2024."},
+  {id:"forestcity", name:"Forest City", loc:"Rutherford County, North Carolina", lat:35.33, lon:-81.86, capital:1, capLabel:"Not disclosed", online:"Operating", status:"operating", note:"One of Meta's earliest campuses; site-level investment is not separately disclosed."},
+  {id:"sarpy", name:"Sarpy / Papillion", loc:"Sarpy County, Nebraska", lat:41.15, lon:-96.04, capital:2.5, capLabel:"$2.5B+", online:"Operating", status:"operating", note:"Meta's Papillion, Nebraska campus — $2.5B+, broke ground 2017."},
+  {id:"fortworth", name:"Fort Worth", loc:"Fort Worth, Texas", lat:32.75, lon:-97.33, capital:1.5, capLabel:"$1.5B+", online:"Operating", status:"operating", note:"A $1.5B+ Texas campus operating since the early 2020s (broke ground 2018)."},
+  {id:"eaglemountain", name:"Eagle Mountain", loc:"Eagle Mountain, Utah", lat:40.31, lon:-112.01, capital:1.5, capLabel:"$1.5B", online:"Operating", status:"operating", note:"A $1.5B Utah campus built out over roughly six years."},
+  {id:"dekalb", name:"DeKalb", loc:"DeKalb, Illinois", lat:41.93, lon:-88.75, capital:1, capLabel:"$1B+", online:"Operating", status:"operating", note:"Five data centers totaling ~2.4M sq ft; $1B+, broke ground 2020."},
+  {id:"gallatin", name:"Gallatin", loc:"Gallatin, Tennessee", lat:36.39, lon:-86.45, capital:1.5, capLabel:"$1.5B+", online:"Operating", status:"operating", note:"Four data centers spanning ~1.6M sq ft; $1.5B+, broke ground 2020."},
+  {id:"mesa", name:"Mesa", loc:"Mesa, Arizona", lat:33.42, lon:-111.74, capital:1, capLabel:"~$1B", online:"Operating", status:"operating", note:"A ~$1B campus in Mesa, Arizona."},
+  {id:"temple", name:"Temple", loc:"Temple, Texas", lat:31.10, lon:-97.36, capital:0.8, capLabel:"$800M+", online:"Operating", status:"operating", note:"An $800M+ Texas campus (broke ground 2022)."},
+  {id:"tulsa", name:"Tulsa", loc:"Tulsa, Oklahoma", lat:36.15, lon:-95.99, capital:2, capLabel:"$2B+", online:"In construction", status:"construction", note:"A $2B+ Oklahoma campus."},
+  {id:"kansascity", name:"Kansas City", loc:"Kansas City, Missouri", lat:39.28, lon:-94.55, capital:2.5, capLabel:"$2.5B+", online:"In construction", status:"construction", note:"A $2.5B+ Kansas City, Missouri campus announced in 2024."},
+  {id:"stantonsprings", name:"Stanton Springs", loc:"Social Circle / Newton County, Georgia", lat:33.66, lon:-83.72, capital:10, capLabel:"$10B+", online:"In construction", status:"construction", note:"A major $10B+ Georgia campus that broke ground in 2025."},
+  {id:"huntsville", name:"Huntsville", loc:"Huntsville, Alabama", lat:34.73, lon:-86.59, capital:1.5, capLabel:"$1.5B+", online:"In construction", status:"construction", note:"A $1.5B+ AI-optimized Alabama campus announced in 2024."},
+  {id:"henrico", name:"Henrico", loc:"Henrico County, Virginia", lat:37.52, lon:-77.32, capital:1, capLabel:"$1B+", online:"In construction", status:"construction", note:"A $1B+ Virginia campus that broke ground in 2025."},
+  {id:"kuna", name:"Kuna", loc:"Kuna, Idaho", lat:43.49, lon:-116.42, capital:0.8, capLabel:"$800M+", online:"In construction", status:"construction", note:"A 960,000 sq ft Idaho campus, $800M+, breaking ground in 2025."},
+  {id:"bowlinggreen", name:"Bowling Green", loc:"Bowling Green, Ohio", lat:41.37, lon:-83.65, capital:0.8, capLabel:"$800M+", online:"In construction", status:"construction", note:"An $800M+ Ohio campus that broke ground in 2024."},
+  {id:"aiken", name:"Aiken", loc:"Aiken, South Carolina", lat:33.56, lon:-81.72, capital:0.8, capLabel:"$800M+", online:"In construction", status:"construction", note:"An $800M+ South Carolina campus that broke ground in 2024."}
+];
+META_BS.forEach(m=>DEALS.push(metaBalanceSheet(m)));
+
 const PLATFORMS = [
   {name:"Blue Owl Capital", vehicle:"US digital infrastructure venture", note:"Anchor capital partner on Meta's Hyperion JV and a co-owner of Stargate Abilene. Flexible private-capital financing for hyperscale developers."},
   {name:"Blackstone", vehicle:"$25B+ Infrastructure Partners AUM", note:"Owns QTS; bought AirTrunk (A$24B, with CPP); leads CoreWeave debt; JV with Digital Realty. The most active single owner/lender in the build-out."},
