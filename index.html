@@ -258,6 +258,9 @@ h1 em{font-style:normal;color:var(--meta);}
 .pcard-name{font-family:"Archivo",sans-serif;font-weight:600;font-size:15.5px;margin-bottom:3px;letter-spacing:-.01em;}
 .pcard-vehicle{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--meta);letter-spacing:.05em;margin-bottom:9px;}
 .pcard-note{font-size:12.5px;color:var(--sand-dim);line-height:1.55;}
+.sk-group{margin-bottom:34px;}
+.sk-head{font-family:"Archivo",sans-serif;font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--sand);margin-bottom:5px;}
+.sk-blurb{color:var(--sand-dim);font-size:13px;line-height:1.55;max-width:80ch;margin-bottom:14px;}
 
 /* ---------- method ---------- */
 .method{margin-top:56px;border-top:1px solid var(--line);padding-top:28px;}
@@ -304,14 +307,15 @@ h1 em{font-style:normal;color:var(--meta);}
 
   <!-- hero -->
   <header class="hero">
-    <div class="eyebrow">Where the capital sits</div>
-    <h1>The map is the easy part. <em>The capital stack is the deal.</em></h1>
+    <div class="eyebrow">Data center capacity · capital &amp; partnerships</div>
+    <h1>How large-scale data center capacity gets <em>financed, built, and owned</em> in the US.</h1>
     <p class="lede">
-      Hyperscale and AI campuses are being delivered through structures that look nothing like real estate:
-      off-balance-sheet joint ventures, residual value guarantees, project bonds sold against a single lease,
-      and outright platform buyouts by long-term asset owners. This map plots known US projects by where they sit
-      and how much capital they carry — Meta in blue, everyone else colored by lifecycle.
-      <strong>Click any node to open the deal and see its capital stack, terms, and counterparties.</strong>
+      Meeting AI capacity targets now depends less on real estate than on capital structure and partner selection —
+      joint ventures with long-term asset owners, project bonds placed against a single lease, private-credit anchors,
+      and dedicated power development. This map plots known US hyperscale and AI campuses and, for each, the
+      structure used to add capacity and the counterparties behind it: developers, financial institutions, lenders,
+      colocation providers, and power partners. <strong>Meta is shown in blue; select any site to open its capital
+      stack, deal terms, and partner roster.</strong>
     </p>
   </header>
 
@@ -323,7 +327,6 @@ h1 em{font-style:normal;color:var(--meta);}
     <button class="chip" data-filter="construction" aria-pressed="false">Under construction</button>
     <button class="chip" data-filter="operating" aria-pressed="false">Recently delivered</button>
     <button class="chip" data-filter="sold" aria-pressed="false">Sold / recapitalized</button>
-    <button class="chip" data-filter="external" aria-pressed="false">External capital</button>
   </div>
 
   <!-- legend -->
@@ -334,7 +337,7 @@ h1 em{font-style:normal;color:var(--meta);}
     <span class="lg"><span class="dot sold"></span> Sold / recapitalized</span>
     <span class="lg lg-scale">
       <i style="width:7px;height:7px"></i><i style="width:12px;height:12px"></i><i style="width:19px;height:19px"></i>
-      &nbsp;Marker area ∝ announced capital
+      &nbsp;Marker area ∝ capacity (MW/GW) · smallest = not disclosed
     </span>
   </div>
 
@@ -359,13 +362,13 @@ h1 em{font-style:normal;color:var(--meta);}
 
   <!-- platform capital -->
   <section class="platforms">
-    <h2 class="sec-title">Platform capital &amp; long-term owners</h2>
+    <h2 class="sec-title">Key stakeholders</h2>
     <p class="sec-sub">
-      Not every commitment attaches to a single site. These are the pools, platforms, and asset owners funding the
-      build-out — the counterparties a hyperscaler negotiates with, and the institutions that end up owning the
-      powered land and delivery teams after a platform is bought.
+      The counterparties a capacity program negotiates with, grouped by the role they play in a data center deal —
+      from the institutions that end up owning the asset, to the developers, power partners, and colocation
+      providers that actually deliver it.
     </p>
-    <div class="pgrid" id="pgrid"></div>
+    <div id="stakeholders"></div>
   </section>
 
   <!-- method -->
@@ -381,7 +384,7 @@ h1 em{font-style:normal;color:var(--meta);}
       </div>
       <div>
         <h4>Known gaps</h4>
-        <p>General contractors, GMP terms, and fund LP identities are disclosed inconsistently. Those fields are left blank rather than inferred. Marker size uses announced project or transaction value where available.</p>
+        <p>General contractors, GMP terms, per-site capacity (MW), and fund LP identities are disclosed inconsistently. Those fields are left blank rather than inferred. Marker size reflects announced capacity (MW/GW) where available; portfolio-level platforms plot at HQ.</p>
       </div>
       <div>
         <h4>Sources</h4>
@@ -405,25 +408,25 @@ const DEALS = [
   {
     id:"hyperion", owner:"meta", status:"construction", external:true,
     name:"Hyperion", loc:"Richland Parish, Louisiana",
-    lat:32.46, lon:-91.62, capital:27, capLabel:"$27B (up to $50B)",
+    lat:32.46, lon:-91.62, capital:27, capLabel:"$27.3B senior secured bond",
     power:"Up to 5 GW", online:"2028 (phase 1)", confidence:"filed",
     structure:"JV + sale-leaseback",
-    summary:"Meta and funds managed by Blue Owl Capital formed a joint venture that develops and owns the campus. Blue Owl funds hold 80%; Meta retains 20% and provides construction and property management services. Meta leases the completed facilities back from the JV. Meta has since signaled total site-related spend could reach ~$50B.",
-    tension:"The lease runs a four-year initial term with extension options — unusually short for an asset this specialized. Meta bought that flexibility by writing a capped residual value guarantee covering the first 16 years of operations, converting lease-term risk into a contingent obligation. It is the clearest example of a hyperscaler using its own credit to de-risk a partner's equity.",
+    summary:"Meta and funds managed by Blue Owl Capital co-develop and own the 5 GW campus through a joint venture (Blue Owl 80% / Meta 20%); Meta develops, operates, and leases back the facilities. The build is funded by a single $27.294B senior secured, fully-amortizing 144A bond issued from a bankruptcy-remote SPV (Beignet Investor LLC), anchored by PIMCO (~$18B) and BlackRock ($3B+). The structure lets Meta commit up to ~$50B of Louisiana capacity at utility scale while keeping the assets off its corporate balance sheet and sharing risk with best-in-class institutional capital.",
+    tension:"This is Meta engineering scale without balance-sheet drag. By contributing land and construction-in-progress into the JV and taking a ~$3B distribution, Meta recycles capital forward into the next tranche of capacity. Its payment guaranty and capped residual value guarantee let the SPV bond price at just T+225 (A+) — one notch off Meta's own AA- — so Meta effectively lends its credit to lower the partnership's cost of capital while keeping the lease off-balance-sheet. It is a repeatable template for adding gigawatts faster than any single balance sheet could fund, with a proven anchor (Blue Owl) it can run again.",
     terms:[
-      {k:"Equity", v:"Blue Owl funds 80% / Meta 20%"},
-      {k:"Debt", v:"Private credit; Pimco-issued securities"},
-      {k:"Debt spread", v:"~+225 bps (≈2× Meta's own AA- spread)"},
+      {k:"Equity", v:"Blue Owl funds 80% / Meta 20% (JV)"},
+      {k:"Bond issued", v:"$27.294B — 144A senior secured, SPV Beignet Investor LLC, matures 2049 (A+)"},
+      {k:"Deal bond spread", v:"T+225 bps (A+ / S&P)"},
+      {k:"Meta corp spread", v:"~T+110 bps (AA-)"},
+      {k:"Spread premium", v:"~+115 bps — one notch (A+ vs AA-)"},
       {k:"Lease term", v:"4-yr initial + extension options"},
-      {k:"Rent commencement", v:null},
-      {k:"GMP", v:null},
-      {k:"Hyperscaler guarantee", v:"Capped residual value guarantee, first 16 yrs"},
+      {k:"Hyperscaler guarantee", v:"Payment guaranty + capped residual value guarantee (first 16 yrs)"},
       {k:"Long-term owner", v:"Blue Owl / Meta JV (SPV)"}
     ],
     parties:[
       {role:"Capital partner (LP)", name:"Funds managed by Blue Owl Capital (80%)"},
       {role:"Sponsor / developer (GP)", name:"Meta Platforms (20%)"},
-      {role:"Lender", name:"Private credit; securities issued by Pimco"},
+      {role:"Lender (bond anchor)", name:"PIMCO (~$18B); BlackRock ($3B+)"},
       {role:"Power provider", name:"Entergy Louisiana"},
       {role:"Tenant", name:"Meta Platforms"},
       {role:"General contractor", name:null}
@@ -431,14 +434,14 @@ const DEALS = [
     stack:[
       {band:"Equity", kind:"equity", party:"Blue Owl funds — 80%", note:"~$7B cash contribution into the JV", pill:"LP"},
       {band:"Equity", kind:"equity", party:"Meta Platforms — 20%", note:"Contributed land and construction-in-progress; took ~$3B one-time distribution", pill:"GP"},
-      {band:"Debt", kind:"debt", party:"Private credit, Pimco-issued securities", note:"Priced ~+225 bps — roughly double Meta's own long-term spread for an AA- borrower", pill:"+225"},
+      {band:"Debt", kind:"debt", party:"$27.294B senior secured bond", note:"144A-for-life from SPV Beignet Investor LLC; PIMCO ~$18B / BlackRock $3B+ anchors; T+225 (A+), matures 2049", pill:"+225"},
       {band:"Offtake", kind:"lease", party:"Operating lease — Meta as tenant", note:"Four-year initial term with extension options; keeps the asset off Meta's balance sheet", pill:"4 yr"},
-      {band:"Support", kind:"credit", party:"Residual value guarantee", note:"Capped cash payment, first 16 years of operations — the price of the short lease term", pill:"16 yr"}
+      {band:"Support", kind:"credit", party:"Payment + residual value guarantee", note:"Meta credit support prices the bond one notch off its own rating — the price of a short lease term", pill:"16 yr"}
     ],
     sources:[
       {t:"Meta Investor Relations — JV announcement", u:"https://investor.atmeta.com/investor-news/press-release-details/2025/Meta-Announces-Joint-Venture-with-Funds-Managed-by-Blue-Owl-Capital-to-Develop-Hyperion-Data-Center/default.aspx"},
-      {t:"Data Center Frontier — Hyperion ownership & power", u:"https://www.datacenterfrontier.com/hyperscale/article/55310441/ownership-and-power-challenges-in-metas-hyperion-and-prometheus-data-centers"},
-      {t:"NOLA.com — $50B expansion", u:"https://www.nola.com/news/business/meta-louisiana-ai-data-center-richland-parish/article_d1308014-c718-4c34-a75f-476a151ef1a7.html"}
+      {t:"PE Insights — record $30B Blue Owl / Meta financing", u:"https://pe-insights.com/blue-owl-and-meta-close-record-30bn-financing-for-ai-data-centre-expansion-in-louisiana/"},
+      {t:"Data Center Frontier — Hyperion ownership & power", u:"https://www.datacenterfrontier.com/hyperscale/article/55310441/ownership-and-power-challenges-in-metas-hyperion-and-prometheus-data-centers"}
     ]
   },
   {
@@ -447,14 +450,14 @@ const DEALS = [
     lat:31.93, lon:-106.40, capital:13, capLabel:"~$13B financing",
     power:"~1 GW", online:"2028", confidence:"reported",
     structure:"Project-level debt / bond",
-    summary:"Meta is assembling a financing package of roughly $13B for the El Paso campus, led by Morgan Stanley and JPMorgan and expected to be mostly debt with a smaller equity slice — leaving Meta more direct ownership than the Hyperion JV. First phase alone is a $1.5B+ Meta build; the financing wraps the larger campus.",
-    tension:"This is the live one. In July 2026 BlackRock began marketing a bond sale of more than $12B against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same credit logic as Hyperion, expressed entirely through debt instead of a JV.",
+    summary:"Meta is funding the El Paso campus largely with project-level debt — a ~$13B package led by Morgan Stanley and JPMorgan, with BlackRock marketing a $12B+ bond against the site. By carrying a smaller equity slice and more direct ownership than the Hyperion JV, Meta keeps control of the asset while still moving the funding off its corporate balance sheet — a second capacity-scaling template that trades the JV partner for the bond market.",
+    tension:"This is the live one, and it shows Meta building optionality across structures. In July 2026 BlackRock began marketing a $12B+ bond against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same single-tenant credit logic as Hyperion, expressed through debt instead of a JV, and giving Meta a second reusable playbook for adding ~1 GW without competing with compute for capital.",
     terms:[
       {k:"Equity", v:"Meta (smaller slice; more direct ownership)"},
-      {k:"Debt", v:"$12B+ bond sale, marketed by BlackRock"},
-      {k:"Debt spread", v:null},
+      {k:"Bond issued", v:"$12B+ marketed by BlackRock (Jul 2026)"},
+      {k:"Deal bond spread", v:"Not yet priced / public"},
+      {k:"Meta corp spread", v:"~T+110 bps (AA-)"},
       {k:"Lease term", v:"Long-term lease, Meta as tenant"},
-      {k:"Rent commencement", v:null},
       {k:"GMP", v:null},
       {k:"Hyperscaler guarantee", v:"Long-term IG lease underwrites the bond"},
       {k:"Long-term owner", v:"Meta (majority) + bondholders"}
@@ -529,16 +532,17 @@ const DEALS = [
     ],
     parties:[
       {role:"Sponsor / owner", name:"Meta Platforms"},
+      {role:"General contractor", name:"Turner Construction (selected)"},
       {role:"Workforce program", name:"Boone County Career Collaborative"},
       {role:"Tenant", name:"Meta Platforms"},
-      {role:"Capital partner", name:null},
-      {role:"General contractor", name:null}
+      {role:"Capital partner", name:null}
     ],
     stack:[
       {band:"Equity", kind:"equity", party:"Meta Platforms — 100%", note:"$10B+ committed; no announced external capital partner", pill:"Direct"},
-      {band:"Asset", kind:"debt", party:"13 buildings / 4M sq ft", note:"10 data center buildings, network facility, logistics warehouse, admin building", pill:"~1 GW"}
+      {band:"Asset", kind:"debt", party:"13 buildings / 4M sq ft", note:"10 data center buildings, network facility, logistics warehouse, admin building — GC Turner Construction", pill:"~1 GW"}
     ],
     sources:[
+      {t:"Turner — selected for $10B Meta Indiana campus", u:"https://www.turnerconstruction.com/insights/turner-selected-as-one-of-the-contractors-for-10-billion-meta-data-center-campus-in-indiana"},
       {t:"Blackridge Research — Meta project list", u:"https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-projects-meta-facebook-locations-world"}
     ]
   },
@@ -727,7 +731,7 @@ const DEALS = [
       {role:"Lender", name:"JPMorgan (lead)"},
       {role:"Tenant", name:"Oracle"},
       {role:"End user", name:"OpenAI"},
-      {role:"Power", name:"On-site gas turbines"}
+      {role:"Power developer", name:"Crusoe + Engine No. 1 JV; 29 GE Vernova turbines (~1 GW on-site; 4.5 GW gas planned)"}
     ],
     stack:[
       {band:"Equity", kind:"equity", party:"Crusoe + Blue Owl", note:"$5B equity into the JV (May 2025 round)", pill:"JV"},
@@ -988,8 +992,8 @@ const DEALS = [
   },
   {
     id:"cyrusone", owner:"peer", status:"sold", external:true,
-    name:"CyrusOne", loc:"Dallas, Texas (platform HQ)",
-    lat:32.95, lon:-96.89, capital:15, capLabel:"$15B take-private",
+    name:"CyrusOne", loc:"Dallas–Fort Worth, Texas (platform HQ)",
+    lat:33.20, lon:-96.62, capital:15, capLabel:"$15B take-private",
     power:"Global fleet", online:"Operating platform", confidence:"filed",
     structure:"Take-private (REIT)",
     summary:"KKR and Global Infrastructure Partners took CyrusOne private for ~$15B ($90.50/share incl. assumed debt) in a deal that closed in 2022 — at the time the largest M&A transaction in data center history.",
@@ -1158,19 +1162,53 @@ const META_BS = [
 ];
 META_BS.forEach(m=>DEALS.push(metaBalanceSheet(m)));
 
-const PLATFORMS = [
-  {name:"Blue Owl Capital", vehicle:"US digital infrastructure venture", note:"Anchor capital partner on Meta's Hyperion JV and a co-owner of Stargate Abilene. Flexible private-capital financing for hyperscale developers."},
-  {name:"Blackstone", vehicle:"$25B+ Infrastructure Partners AUM", note:"Owns QTS; bought AirTrunk (A$24B, with CPP); leads CoreWeave debt; JV with Digital Realty. The most active single owner/lender in the build-out."},
-  {name:"BlackRock / GIP & AIP", vehicle:"Global Infrastructure Partners + AI Infrastructure Partnership", note:"Co-acquirer of Aligned ($40B) and CyrusOne ($15B); marketed Meta's $12B+ El Paso bond. AIP is BlackRock + GIP + MGX + Microsoft + NVIDIA."},
-  {name:"MGX", vehicle:"Abu Dhabi AI investment vehicle", note:"Co-acquirer of Aligned Data Centers; sovereign-scale capital pairing with BlackRock and GIP across AI infrastructure."},
-  {name:"Pimco", vehicle:"Private credit", note:"Issued much of the debt behind Meta's Hyperion JV and has anchored large single-site AI financings when banks step back."},
-  {name:"KKR", vehicle:"~$10B data center platform + CyrusOne", note:"Co-owns CyrusOne (with GIP) and is building a dedicated data center / power company. Adam Selipsky (ex-AWS CEO) leads the new platform."},
-  {name:"DigitalBridge", vehicle:"$11.7B+ digital infra funds", note:"Owns Switch (with IFM) and recapitalized Vantage (with Silver Lake). Also a CoreWeave credit participant. A pure-play digital infrastructure owner-operator."},
-  {name:"Silver Lake", vehicle:"Tech-focused private equity", note:"Co-led the $9.2B Vantage recapitalization — tech PE moving into physical AI infrastructure."},
-  {name:"Magnetar Capital", vehicle:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed debt facilities — a specialist in financing compute assets rather than buildings."},
-  {name:"CPP Investments", vehicle:"Pension capital", note:"12% of AirTrunk alongside Blackstone; also entering development directly via a JV with Goodman Group. Patient, long-duration ownership."},
-  {name:"Brookfield Asset Management", vehicle:"$10B AI Infrastructure Fund", note:"Targeting up to $100B across digital infrastructure; acquired Data4 in Europe and partnering on AI-ready facilities."},
-  {name:"SB Energy / SoftBank", vehicle:"Powered-land developer", note:"Provides powered infrastructure for Stargate sites (e.g. Milam County). A power developer anchoring data center deals — the scarce input at scale."}
+const STAKEHOLDERS = [
+  {bucket:"Long-term asset owners (equity)",
+   blurb:"Institutions that acquire and hold the platforms and campuses — patient, low-cost-of-capital equity that increasingly displaces public-market and developer ownership.",
+   items:[
+     {name:"Blue Owl Capital", tag:"Private capital / JV equity", note:"80% owner of Meta's Hyperion JV and co-owner of Stargate Abilene. Flexible equity for hyperscale developers — Meta's proven anchor partner."},
+     {name:"BlackRock / GIP + AIP", tag:"Infrastructure equity", note:"Co-owner of Aligned ($40B) and CyrusOne ($15B). AIP = BlackRock + GIP + MGX + Microsoft + NVIDIA — capital that is also a customer and supplier of AI."},
+     {name:"Blackstone", tag:"Infrastructure equity", note:"Owns QTS; bought AirTrunk (A$24B with CPP); JV with Digital Realty. The most active single owner in the sector."},
+     {name:"MGX", tag:"Sovereign AI capital (Abu Dhabi)", note:"Co-acquirer of Aligned; sovereign-scale equity pairing with BlackRock and GIP."},
+     {name:"KKR", tag:"Infrastructure equity", note:"Co-owns CyrusOne (with GIP) and is building a dedicated data center / power platform led by ex-AWS CEO Adam Selipsky."},
+     {name:"DigitalBridge · IFM · Silver Lake", tag:"Digital-infra & pension equity", note:"Own Switch; recapitalized Vantage ($9.2B). Pension and specialist capital seeking long-duration, inflation-linked cash flows."},
+     {name:"CPP Investments · Brookfield", tag:"Pension / infra funds", note:"CPP holds 12% of AirTrunk and develops via Goodman; Brookfield is deploying a $10B AI infrastructure fund toward up to $100B."}
+   ]},
+  {bucket:"Lenders (bond & balance sheet)",
+   blurb:"Providers of project bonds, private credit, and syndicated bank debt — increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
+   items:[
+     {name:"PIMCO", tag:"Private credit / bond anchor", note:"~$18B anchor of Meta's $27.3B Hyperion SPV bond; also anchored Oracle's $16.3B Stargate financing."},
+     {name:"Morgan Stanley", tag:"Lead arranger", note:"Co-lead on Meta's El Paso package; arranged xAI's ~$5B Colossus debt facility (notes + term loans)."},
+     {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"Co-lead on El Paso; led the $7.1B initial and $9.6B Stargate Abilene construction debt."},
+     {name:"BlackRock (debt)", tag:"Bond marketing", note:"Marketing Meta's $12B+ El Paso bond; also $3B+ of the Hyperion anchor."},
+     {name:"Magnetar Capital", tag:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed facilities — financing compute, not buildings."}
+   ]},
+  {bucket:"Data center developers & GCs",
+   blurb:"The operators and general contractors that actually deliver campuses — the scarce delivery capacity behind every capacity target, and often the counterparty in a build-vs-partner decision.",
+   items:[
+     {name:"Crusoe · Primary Digital", tag:"AI developer", note:"Develops and co-owns Stargate Abilene; vertically integrated with on-site power generation."},
+     {name:"Related Digital", tag:"Developer", note:"Develops Stargate Michigan (1 GW, $7B) with Oracle."},
+     {name:"Digital Realty · Vantage · QTS · Aligned · Switch", tag:"Hyperscale developers", note:"Wholesale developer-operators building to hyperscale spec, usually inside JV or platform structures."},
+     {name:"Turner Construction", tag:"General contractor", note:"Selected GC for Meta's $10B Lebanon, Indiana campus; ~$39B backlog, heavily data-center weighted."},
+     {name:"Holder · DPR · Mortenson · Fortis", tag:"Mission-critical GCs", note:"Top hyperscale GCs. Mortenson and Fortis have built Meta campuses in Iowa and Oregon; DPR has delivered 1.5+ GW of critical load."}
+   ]},
+  {bucket:"Power developers",
+   blurb:"Companies that develop and finance the electricity itself — behind-the-meter gas, fuel cells, and nuclear — plus the utilities and long-term PPAs that clear interconnection. Increasingly the gating item, ahead of the building.",
+   items:[
+     {name:"GE Vernova", tag:"Turbines / on-site generation", note:"Gas-turbine order book full to 2029; 29 turbines (~1 GW) for Crusoe's Abilene campus; Chevron JV for co-located DC power."},
+     {name:"SB Energy (SoftBank)", tag:"Powered-land developer", note:"Provides powered infrastructure for Stargate sites (e.g. Milam County) — a power developer anchoring the deal."},
+     {name:"Constellation Energy", tag:"Nuclear PPA", note:"20-year, ~1.1 GW offtake with Meta from the Clinton Clean Energy Center starting 2027."},
+     {name:"Bloom Energy", tag:"Fuel cells", note:"Solid-oxide on-site fuel cells; a fast-to-deploy BTM source scaling across data centers this decade."},
+     {name:"Entergy · WEC · regulated utilities", tag:"Interconnection", note:"Host utilities (Entergy Louisiana for Hyperion, WEC for Microsoft Fairwater) providing the multi-GW grid capacity."}
+   ]},
+  {bucket:"Colocation providers",
+   blurb:"Wholesale and retail colo operators that lease capacity to hyperscalers — the alternative to self-build when the priority is speed to capacity.",
+   items:[
+     {name:"Equinix", tag:"Retail + xScale", note:"Global interconnection leader; xScale JV vehicles target hyperscale capacity."},
+     {name:"Digital Realty", tag:"Wholesale", note:"Hyperscale leases plus a $7B Blackstone development JV."},
+     {name:"QTS · CyrusOne · Aligned · Switch · Vantage", tag:"Hyperscale wholesale", note:"Privately-owned platforms delivering large leased blocks — the counterparties to a lease-vs-build decision."},
+     {name:"CoreWeave", tag:"AI cloud (neocloud)", note:"GPU-as-a-service backed by asset-level debt; a capacity provider to AI labs and hyperscalers."}
+   ]}
 ];
 
 /* ============================ MAP ============================ */
@@ -1178,60 +1216,75 @@ const STATUS_COL = {construction:"#F2A33C", operating:"#4E9C8F", sold:"#B889D6"}
 const META_COL = "#4A9EE7";
 function colorFor(d){ return d.owner==="meta" ? META_COL : STATUS_COL[d.status]; }
 
+/* Marker area ∝ capacity (MW). Undisclosed / portfolio-level → floor size. */
+const MW = {
+  hyperion:5000, elpaso:1000, prometheus:1000, lebanon:1000,
+  "stargate-abilene":1200, "stargate-michigan":1000, colossus:150, rainier:2250
+};
+function capMW(d){ return MW[d.id] || null; }
+function sizeFor(d){ const mw=capMW(d); return mw ? Math.max(10, Math.sqrt(mw)*0.42) : 8; }
+
 let activeFilter = "all";
+let selectedId = "hyperion";
 
 function filtered(){
   if(activeFilter==="all") return DEALS;
   if(activeFilter==="meta") return DEALS.filter(d=>d.owner==="meta");
-  if(activeFilter==="external") return DEALS.filter(d=>d.external);
   return DEALS.filter(d=>d.status===activeFilter);
 }
 
-function sizeFor(c){ return Math.max(9, Math.sqrt(c)*6.4); }
+const GEO = {
+  scope:"usa", projection:{type:"albers usa"},
+  bgcolor:"rgba(0,0,0,0)",
+  showland:true, landcolor:"#16212C",
+  subunitcolor:"#26343F", subunitwidth:0.9,
+  showlakes:false, showframe:false,
+  coastlinecolor:"#2C3C49", coastlinewidth:0.9,
+  showcountries:false
+};
 
 function drawMap(){
   const rows = filtered();
-  const trace = {
-    type:"scattergeo",
-    locationmode:"USA-states",
-    lat: rows.map(d=>d.lat),
-    lon: rows.map(d=>d.lon),
-    text: rows.map(d=>`${d.name}<br>${d.loc}<br>${d.capLabel} · ${d.structure}`),
+  const base = {
+    type:"scattergeo", locationmode:"USA-states",
+    lat: rows.map(d=>d.lat), lon: rows.map(d=>d.lon),
+    text: rows.map(d=>`${d.name}<br>${d.loc}<br>${d.power} · ${d.structure}`),
     customdata: rows.map(d=>d.id),
     hoverinfo:"text",
-    hoverlabel:{
-      bgcolor:"#141E29", bordercolor:"#25333F",
-      font:{family:"IBM Plex Mono, monospace", size:11.5, color:"#D9E0E6"}
-    },
+    hoverlabel:{ bgcolor:"#141E29", bordercolor:"#25333F",
+      font:{family:"IBM Plex Mono, monospace", size:11.5, color:"#D9E0E6"} },
     mode:"markers",
     marker:{
-      size: rows.map(d=>sizeFor(d.capital)),
+      size: rows.map(d=>sizeFor(d)),
       color: rows.map(d=>colorFor(d)),
       opacity:0.9,
-      line:{ width: rows.map(d=>d.id==="elpaso"||d.id==="hyperion"?2:1),
-             color: rows.map(d=>d.owner==="meta"?"#0E1620":"#0E1620") }
+      line:{ width:1, color:"#0E1620" }
     }
   };
-  const layout = {
-    geo:{
-      scope:"usa", projection:{type:"albers usa"},
-      bgcolor:"rgba(0,0,0,0)",
-      showland:true, landcolor:"#16212C",
-      subunitcolor:"#26343F", subunitwidth:0.9,
-      showlakes:false, showframe:false,
-      coastlinecolor:"#2C3C49", coastlinewidth:0.9,
-      showcountries:false
-    },
-    paper_bgcolor:"rgba(0,0,0,0)",
-    margin:{t:8,b:8,l:8,r:8},
-    dragmode:false
-  };
-  Plotly.newPlot("map", [trace], layout, {displayModeBar:false, responsive:true})
+  const traces = [base];
+  const sel = rows.find(d=>d.id===selectedId);
+  if(sel){
+    traces.push({
+      type:"scattergeo", locationmode:"USA-states",
+      lat:[sel.lat], lon:[sel.lon],
+      mode:"markers+text",
+      text:["  "+sel.name+"  "], textposition:"top center",
+      textfont:{family:"Archivo, sans-serif", size:12.5, color:"#EAF1F6"},
+      hoverinfo:"skip",
+      marker:{ size:[sizeFor(sel)+14], color:"rgba(234,241,246,0.05)",
+        line:{width:2.5, color:"#EAF1F6"} }
+    });
+  }
+  const layout = { geo:GEO, paper_bgcolor:"rgba(0,0,0,0)", margin:{t:8,b:8,l:8,r:8}, dragmode:false, showlegend:false };
+  Plotly.newPlot("map", traces, layout, {displayModeBar:false, responsive:true})
     .then(gd=>{
       gd.removeAllListeners && gd.removeAllListeners("plotly_click");
       gd.on("plotly_click", ev=>{
         const id = ev.points[0].customdata;
+        if(!id) return;               // clicks on the selection ring carry no id
+        selectedId = id;
         openDeal(DEALS.find(d=>d.id===id));
+        drawMap();
       });
     });
 }
@@ -1315,12 +1368,17 @@ function openDeal(d){
   document.getElementById("dossier").scrollTop = 0;
 }
 
-/* ============================ PLATFORMS ============================ */
-document.getElementById("pgrid").innerHTML = PLATFORMS.map(p=>`
-  <div class="pcard">
-    <div class="pcard-name">${esc(p.name)}</div>
-    <div class="pcard-vehicle">${esc(p.vehicle)}</div>
-    <div class="pcard-note">${esc(p.note)}</div>
+/* ============================ STAKEHOLDERS ============================ */
+document.getElementById("stakeholders").innerHTML = STAKEHOLDERS.map(g=>`
+  <div class="sk-group">
+    <div class="sk-head">${esc(g.bucket)}</div>
+    <div class="sk-blurb">${esc(g.blurb)}</div>
+    <div class="pgrid">${g.items.map(p=>`
+      <div class="pcard">
+        <div class="pcard-name">${esc(p.name)}</div>
+        <div class="pcard-vehicle">${esc(p.tag)}</div>
+        <div class="pcard-note">${esc(p.note)}</div>
+      </div>`).join("")}</div>
   </div>`).join("");
 
 /* ============================ CONTROLS ============================ */
