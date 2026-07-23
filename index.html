@@ -104,7 +104,7 @@ h1 em{font-style:normal;color:var(--meta);}
 .split{
   display:grid;grid-template-columns:1.32fr 1fr;
   gap:0;border:1px solid var(--line);border-top:none;
-  min-height:620px;
+  height:620px;
 }
 .mapcol{border-right:1px solid var(--line);position:relative;background:var(--ink-panel);}
 #map{width:100%;height:620px;}
@@ -131,7 +131,7 @@ h1 em{font-style:normal;color:var(--meta);}
 .lg-scale i{display:block;border-radius:50%;background:var(--steel);opacity:.75;}
 
 /* ---------- dossier ---------- */
-.dossier{background:var(--ink-panel);display:flex;flex-direction:column;}
+.dossier{background:var(--ink-panel);display:flex;flex-direction:column;min-height:0;}
 .dsr-empty{
   padding:44px 26px;color:var(--steel);
   font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.9;
@@ -164,7 +164,7 @@ h1 em{font-style:normal;color:var(--meta);}
 .met-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--steel);display:block;margin-bottom:5px;}
 .met-v{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;color:var(--sand);}
 
-.dsr-body{padding:22px 26px;overflow-y:auto;flex:1;}
+.dsr-body{padding:22px 26px;overflow-y:auto;flex:1;min-height:0;}
 .sect{margin-bottom:26px;}
 .sect:last-child{margin-bottom:0;}
 .sect-h{
@@ -193,19 +193,12 @@ h1 em{font-style:normal;color:var(--meta);}
 }
 .ol-row:first-child .ol-rail::before{top:50%;}
 .ol-row:last-child .ol-rail::before{bottom:50%;}
-.ol-node{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:9px;height:9px;border-radius:50%;
-  background:var(--ink-panel);border:1.5px solid var(--steel);
-}
-.ol-row[data-kind="equity"] .ol-node{border-color:var(--meta);background:var(--meta);}
-.ol-row[data-kind="debt"] .ol-node{border-color:var(--construction);}
-.ol-row[data-kind="lease"] .ol-node{border-color:var(--operating);}
-.ol-row[data-kind="credit"] .ol-node{border-color:var(--sold);}
-.ol-tick{
-  position:absolute;left:50%;top:50%;height:1px;width:26px;
-  background:var(--line);transform:translateY(-.5px);
-}
+.ol-node{display:none;}
+.ol-tick{display:none;}
+.ol-row[data-kind="equity"] .ol-card{border-left:3px solid var(--meta);}
+.ol-row[data-kind="debt"] .ol-card{border-left:3px solid var(--construction);}
+.ol-row[data-kind="lease"] .ol-card{border-left:3px solid var(--operating);}
+.ol-row[data-kind="credit"] .ol-card{border-left:3px solid var(--sold);}
 .ol-band{
   font-family:"IBM Plex Mono",monospace;font-size:9px;
   letter-spacing:.13em;text-transform:uppercase;color:var(--steel);
@@ -272,7 +265,8 @@ h1 em{font-style:normal;color:var(--meta);}
 .method p{font-size:12.5px;color:var(--sand-dim);line-height:1.62;margin:0 0 8px;}
 
 @media(max-width:940px){
-  .split{grid-template-columns:1fr;}
+  .split{grid-template-columns:1fr;height:auto;}
+  .dossier{height:auto;}
   .mapcol{border-right:none;border-bottom:1px solid var(--line);}
   #map{height:430px;}
   .titleblock{grid-template-columns:1fr 1fr;}
@@ -308,14 +302,14 @@ h1 em{font-style:normal;color:var(--meta);}
   <!-- hero -->
   <header class="hero">
     <div class="eyebrow">Data center capacity · capital &amp; partnerships</div>
-    <h1>How large-scale data center capacity gets <em>financed, built, and owned</em> in the US.</h1>
+    <h1>Overview of US data centers <em>under construction, recently delivered, and sold or recapitalized.</em></h1>
     <p class="lede">
-      Meeting AI capacity targets now depends less on real estate than on capital structure and partner selection —
-      joint ventures with long-term asset owners, project bonds placed against a single lease, private-credit anchors,
-      and dedicated power development. This map plots known US hyperscale and AI campuses and, for each, the
-      structure used to add capacity and the counterparties behind it: developers, financial institutions, lenders,
-      colocation providers, and power partners. <strong>Meta is shown in blue; select any site to open its capital
-      stack, deal terms, and partner roster.</strong>
+      Due to the significant capital requirements, existing power constraints, and execution risks, increasing AI
+      capacity depends on a variety of strong relationships throughout the data center life cycle. This map plots
+      known US data centers and identifies the structures used to add capacity and the counterparties behind it:
+      developers, financial institutions, lenders, colocation providers, and power partners.
+      <strong>Meta is shown in blue; select any site to open its capital stack, deal highlights, and key
+      stakeholders.</strong>
     </p>
   </header>
 
@@ -323,7 +317,7 @@ h1 em{font-style:normal;color:var(--meta);}
   <div class="controls">
     <span class="ctrl-label">Filter</span>
     <button class="chip" data-filter="all" aria-pressed="true">All projects</button>
-    <button class="chip" data-filter="meta" aria-pressed="false">Meta only</button>
+    <button class="chip" data-filter="meta" aria-pressed="false">Meta</button>
     <button class="chip" data-filter="construction" aria-pressed="false">Under construction</button>
     <button class="chip" data-filter="operating" aria-pressed="false">Recently delivered</button>
     <button class="chip" data-filter="sold" aria-pressed="false">Sold / recapitalized</button>
@@ -364,9 +358,9 @@ h1 em{font-style:normal;color:var(--meta);}
   <section class="platforms">
     <h2 class="sec-title">Key stakeholders</h2>
     <p class="sec-sub">
-      The counterparties a capacity program negotiates with, grouped by the role they play in a data center deal —
-      from the institutions that end up owning the asset, to the developers, power partners, and colocation
-      providers that actually deliver it.
+      The key partners a hyperscaler needs to negotiate with, grouped by the role they play in a data center deal —
+      from the financial institutions that finance the asset, to the developers, power partners, and colocation
+      providers.
     </p>
     <div id="stakeholders"></div>
   </section>
@@ -809,7 +803,7 @@ const DEALS = [
     lat:35.06, lon:-90.03, capital:10, capLabel:"$10B debt + equity",
     power:"150 MW+ (expanding)", online:"Operating since 2024", confidence:"reported",
     structure:"Corporate debt secured on GPUs",
-    summary:"xAI raised a combined $10B in debt and equity in 2025, including a ~$5B facility arranged by Morgan Stanley — a term loan B, a fixed-rate term loan, and senior secured notes. The Colossus cluster near Memphis housed ~200,000 GPUs by mid-2025.",
+    summary:"xAI raised a combined $10B in debt and equity in 2025, including a ~$5B debt package that Morgan Stanley placed as bookrunner — a term loan B, a fixed-rate term loan, and senior secured notes, sold to global debt investors (Morgan Stanley ran the deal as investment bank; it did not hold the paper). The Colossus cluster near Memphis housed ~200,000 GPUs by mid-2025.",
     tension:"The collateral is the twist: lenders reportedly gained the right to take over Colossus and re-let it to other AI companies on default. Financing a depreciating GPU cluster is a fundamentally different credit than a leased building — the asset's residual value, not a tenant's covenant, backstops the debt.",
     terms:[
       {k:"Equity", v:"Part of $10B combined raise"},
@@ -821,13 +815,13 @@ const DEALS = [
     ],
     parties:[
       {role:"Sponsor / owner", name:"xAI"},
-      {role:"Lead arranger", name:"Morgan Stanley"},
+      {role:"Investment bank (bookrunner)", name:"Morgan Stanley"},
       {role:"Lenders", name:"Global debt investors (syndicate)"},
       {role:"Tenant / user", name:"xAI (self)"}
     ],
     stack:[
       {band:"Equity", kind:"equity", party:"xAI", note:"Equity portion of the $10B combined raise", pill:"Sponsor"},
-      {band:"Debt", kind:"debt", party:"~$5B Morgan Stanley facility", note:"Term loan B, fixed-rate term loan, senior secured notes", pill:"$5B"},
+      {band:"Debt", kind:"debt", party:"$5B secured notes + term loans", note:"Placed by Morgan Stanley as bookrunner; oversubscribed with global debt investors", pill:"$5B"},
       {band:"Collateral", kind:"credit", party:"Colossus GPU cluster", note:"Lenders can step in and re-let the cluster on default", pill:"Step-in"}
     ],
     sources:[
@@ -842,11 +836,12 @@ const DEALS = [
     lat:41.70, lon:-86.51, capital:11, capLabel:"$11B",
     power:"2.25 GW (planned)", online:"Operating Oct 2025", confidence:"announced",
     structure:"Balance sheet + anchor customer",
-    summary:"Amazon's $11B AI campus, opened October 2025, built around ~500,000 of its own Trainium2 chips dedicated to a single customer — Anthropic. Eighteen buildings operating, fourteen more under construction; 32 buildings / ~6.5M sq ft at full scale.",
-    tension:"The counterpoint to the JV wave: the largest AI campuses can still be built on a hyperscaler's own balance sheet when the chips and the customer are captive. Anthropic functions as the anchor tenant, but there is no external project capital — the credit lives at Amazon, not at the site.",
+    summary:"Amazon's $11B AI campus, opened October 2025, built around ~500,000 of its own Trainium2 chips dedicated to a single customer — Anthropic. Eighteen buildings operating, fourteen more under construction; 32 buildings / ~6.5M sq ft at full scale. Amazon does not separately disclose Rainier's financing in its SEC filings — the build is funded through Amazon's own capital expenditure, and its 10-K reports data center property and finance/operating leases only at the portfolio level, not by project.",
+    tension:"The counterpoint to the JV wave: the largest AI campuses can still be built on a hyperscaler's own balance sheet when the chips and the customer are captive. Anthropic functions as the anchor tenant, but there is no external project-level capital and no project-specific financing disclosure — the credit lives at Amazon, not at the site.",
     terms:[
       {k:"Equity", v:"Amazon 100% (balance sheet)"},
-      {k:"Debt", v:"None at project level"},
+      {k:"Debt", v:"None disclosed at project level"},
+      {k:"Financing disclosure", v:"Not broken out in Amazon SEC filings; funded via capex"},
       {k:"Anchor customer", v:"Anthropic (Trainium capacity)"},
       {k:"GMP", v:null},
       {k:"Long-term owner", v:"Amazon (AWS)"}
@@ -863,6 +858,7 @@ const DEALS = [
     ],
     sources:[
       {t:"CNBC — Amazon opens $11B Project Rainier", u:"https://www.cnbc.com/2025/10/29/amazon-opens-11-billion-ai-data-center-project-rainier-in-indiana.html"},
+      {t:"Amazon SEC filings (10-K) — EDGAR", u:"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001018724&type=10-K"},
       {t:"Data Center Knowledge — Rainier / Anthropic", u:"https://www.datacenterknowledge.com/supercomputers/project-rainer-aws-anthropic-complete-massive-ai-supercomputing-cluster"}
     ]
   },
@@ -1178,7 +1174,7 @@ const STAKEHOLDERS = [
    blurb:"Providers of project bonds, private credit, and syndicated bank debt — increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
    items:[
      {name:"PIMCO", tag:"Private credit / bond anchor", note:"~$18B anchor of Meta's $27.3B Hyperion SPV bond; also anchored Oracle's $16.3B Stargate financing."},
-     {name:"Morgan Stanley", tag:"Lead arranger", note:"Co-lead on Meta's El Paso package; arranged xAI's ~$5B Colossus debt facility (notes + term loans)."},
+     {name:"Morgan Stanley", tag:"Investment bank / bookrunner", note:"Co-lead on Meta's El Paso package; ran the books on xAI's ~$5B Colossus notes + term loans (placed with investors, not held)."},
      {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"Co-lead on El Paso; led the $7.1B initial and $9.6B Stargate Abilene construction debt."},
      {name:"BlackRock (debt)", tag:"Bond marketing", note:"Marketing Meta's $12B+ El Paso bond; also $3B+ of the Hyperion anchor."},
      {name:"Magnetar Capital", tag:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed facilities — financing compute, not buildings."}
@@ -1341,11 +1337,11 @@ function openDeal(d){
     </div>
     <div class="dsr-body">
       <div class="sect">
-        <div class="sect-h">Structure</div>
+        <div class="sect-h">Background</div>
         <p>${esc(d.summary)}</p>
       </div>
       <div class="sect">
-        <div class="sect-h">Deal terms</div>
+        <div class="sect-h">Deal Highlights</div>
         ${terms}
       </div>
       <div class="sect">
