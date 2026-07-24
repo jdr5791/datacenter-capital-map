@@ -185,11 +185,11 @@ h1 em{font-style:normal;color:var(--meta);}
 
 /* ---------- SIGNATURE: capital stack one-line ---------- */
 .oneline{margin-top:4px;}
-.ol-row{display:grid;grid-template-columns:74px 1fr;gap:0;align-items:stretch;}
+.ol-row{display:grid;grid-template-columns:84px 1fr;gap:0;align-items:stretch;}
 .ol-rail{position:relative;}
 .ol-rail::before{
-  content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;
-  background:var(--line);transform:translateX(-.5px);
+  content:"";position:absolute;right:0;top:0;bottom:0;width:1px;
+  background:var(--line);
 }
 .ol-row:first-child .ol-rail::before{top:50%;}
 .ol-row:last-child .ol-rail::before{bottom:50%;}
@@ -203,7 +203,7 @@ h1 em{font-style:normal;color:var(--meta);}
   font-family:"IBM Plex Mono",monospace;font-size:9px;
   letter-spacing:.13em;text-transform:uppercase;color:var(--steel);
   position:absolute;left:0;top:50%;transform:translateY(-50%);
-  width:44px;text-align:right;line-height:1.25;
+  width:64px;text-align:right;line-height:1.25;white-space:nowrap;
 }
 .ol-card{
   border:1px solid var(--line);background:var(--ink-raised);
@@ -411,8 +411,8 @@ const DEALS = [
       {k:"Equity", v:"Blue Owl funds 80% / Meta 20% (JV)"},
       {k:"Bond issued", v:"$27.294B — 144A senior secured, SPV Beignet Investor LLC, matures 2049 (A+)"},
       {k:"Deal bond spread", v:"T+225 bps (A+ / S&P)"},
-      {k:"Meta corp spread", v:"~T+110 bps (AA-)"},
-      {k:"Spread premium", v:"~+115 bps — one notch (A+ vs AA-)"},
+      {k:"Meta corp spread", v:"~T+100–120 bps (AA-, est.)"},
+      {k:"Spread premium", v:"~+110 bps — one notch (A+ vs AA-)"},
       {k:"Lease term", v:"4-yr initial + extension options"},
       {k:"Hyperscaler guarantee", v:"Payment guaranty + capped residual value guarantee (first 16 yrs)"},
       {k:"Long-term owner", v:"Blue Owl / Meta JV (SPV)"}
@@ -445,12 +445,12 @@ const DEALS = [
     power:"~1 GW", online:"2028", confidence:"reported",
     structure:"Project-level debt / bond",
     summary:"Meta is funding the El Paso campus largely with project-level debt — a ~$13B package led by Morgan Stanley and JPMorgan, with BlackRock marketing a $12B+ bond against the site. By carrying a smaller equity slice and more direct ownership than the Hyperion JV, Meta keeps control of the asset while still moving the funding off its corporate balance sheet — a second capacity-scaling template that trades the JV partner for the bond market.",
-    tension:"This is the live one, and it shows Meta building optionality across structures. In July 2026 BlackRock began marketing a $12B+ bond against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same single-tenant credit logic as Hyperion, expressed through debt instead of a JV, and giving Meta a second reusable playbook for adding ~1 GW without competing with compute for capital.",
+    tension:"This is the live one, and it shows Meta building optionality across structures. As of late July 2026, BlackRock is marketing a $12B+ bond against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same single-tenant credit logic as Hyperion, expressed through debt instead of a JV, and giving Meta a second reusable playbook for adding ~1 GW without competing with compute for capital.",
     terms:[
       {k:"Equity", v:"Meta (smaller slice; more direct ownership)"},
-      {k:"Bond issued", v:"$12B+ marketed by BlackRock (Jul 2026)"},
+      {k:"Bond issued", v:"$12B+ marketed by BlackRock (as of late Jul 2026)"},
       {k:"Deal bond spread", v:"Not yet priced / public"},
-      {k:"Meta corp spread", v:"~T+110 bps (AA-)"},
+      {k:"Meta corp spread", v:"~T+100–120 bps (AA-, est.)"},
       {k:"Lease term", v:"Long-term lease, Meta as tenant"},
       {k:"GMP", v:null},
       {k:"Hyperscaler guarantee", v:"Long-term IG lease underwrites the bond"},
@@ -466,7 +466,7 @@ const DEALS = [
     ],
     stack:[
       {band:"Equity", kind:"equity", party:"Meta Platforms", note:"Smaller equity slice; Meta retains more direct ownership than under the Hyperion JV", pill:"Sponsor"},
-      {band:"Debt", kind:"debt", party:"Bond sale — $12B+", note:"Marketing began Jul 2026; pricing expected the following week", pill:"Live"},
+      {band:"Debt", kind:"debt", party:"Bond sale — $12B+", note:"Marketing underway as of late July 2026; pricing expected shortly after", pill:"Live"},
       {band:"Debt", kind:"debt", party:"Morgan Stanley / JPMorgan", note:"Lead arrangers running investor calls", pill:"Leads"},
       {band:"Offtake", kind:"lease", party:"Long-term lease — Meta as tenant", note:"Contracted cash flows against a single investment-grade tenant make the bond placeable", pill:"IG"}
     ],
@@ -482,7 +482,7 @@ const DEALS = [
     power:"1 GW", online:"2026", confidence:"announced",
     structure:"Balance sheet",
     summary:"Meta's first gigawatt-scale AI supercluster, on the New Albany campus where Meta has operated since 2017. No external capital partner announced — this one sits on Meta's own balance sheet and is the design template Hyperion is built from.",
-    tension:"Speed was the governing constraint: the buildout used aluminium tent structures with weatherproof fabric to start compute sooner, and on-site gas turbines rather than waiting on utility interconnection. Prometheus proves the delivery model that Hyperion then wraps in outside capital.",
+    tension:"Speed was the governing constraint: the buildout used aluminum tent structures with weatherproof fabric to start compute sooner, and on-site gas turbines rather than waiting on utility interconnection. Prometheus proves the delivery model that Hyperion then wraps in outside capital.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -707,11 +707,11 @@ const DEALS = [
     lat:32.45, lon:-99.73, capital:15, capLabel:"~$15B",
     power:"1.2 GW", online:"Phased, operating 2025", confidence:"filed",
     structure:"Dev JV + sale-leaseback",
-    summary:"The flagship Stargate site. Crusoe and Blue Owl Capital co-own the campus through a JV (with Primary Digital Infrastructure), lease it to Oracle, which rents the compute to OpenAI. A May 2025 round added $11.6B — $9.6B debt from JPMorgan plus $5B equity from Crusoe and Blue Owl — on top of an initial $7.1B JPMorgan construction loan.",
-    tension:"The purest expression of the new stack: a developer/credit JV owns the shell, a hyperscaler (Oracle) signs the lease, and the AI lab (OpenAI) is the ultimate user. The lease to Oracle is what makes $9.6B of bank debt financeable against a single site — the same single-tenant credit logic Meta uses at El Paso.",
+    summary:"The flagship Stargate site. Crusoe and Blue Owl Capital co-own the campus through a JV (with Primary Digital Infrastructure), lease it to Oracle, which rents the compute to OpenAI. A May 2025 round added $11.6B — roughly $5B equity from Crusoe and Blue Owl plus ~$6.6B debt — on top of an initial $7.1B JPMorgan construction loan, bringing total committed capital to ~$15B.",
+    tension:"The purest expression of the new stack: a developer/credit JV owns the shell, a hyperscaler (Oracle) signs the lease, and the AI lab (OpenAI) is the ultimate user. The lease to Oracle is what makes billions in bank debt financeable against a single site — the same single-tenant credit logic Meta uses at El Paso.",
     terms:[
       {k:"Equity", v:"$5B — Crusoe + Blue Owl"},
-      {k:"Debt", v:"$9.6B (JPMorgan) + $7.1B initial construction loan"},
+      {k:"Debt", v:"~$6.6B (2025 round) + $7.1B initial construction loan (JPMorgan)"},
       {k:"Debt spread", v:null},
       {k:"Lease term", v:"Long-term lease to Oracle"},
       {k:"Rent commencement", v:"Phased from 2025 delivery"},
@@ -729,7 +729,7 @@ const DEALS = [
     ],
     stack:[
       {band:"Equity", kind:"equity", party:"Crusoe + Blue Owl", note:"$5B equity into the JV (May 2025 round)", pill:"JV"},
-      {band:"Debt", kind:"debt", party:"JPMorgan — $9.6B", note:"Phase-2 debt on top of an initial $7.1B construction loan", pill:"$9.6B"},
+      {band:"Debt", kind:"debt", party:"JPMorgan-led debt", note:"~$6.6B in the May 2025 round on top of an initial $7.1B construction loan", pill:"~$6.6B"},
       {band:"Offtake", kind:"lease", party:"Lease to Oracle", note:"Oracle operates and subleases compute to OpenAI", pill:"Oracle"},
       {band:"End user", kind:"credit", party:"OpenAI", note:"Ultimate consumer of the compute capacity", pill:"OpenAI"}
     ],
@@ -1159,51 +1159,57 @@ const META_BS = [
 META_BS.forEach(m=>DEALS.push(metaBalanceSheet(m)));
 
 const STAKEHOLDERS = [
-  {bucket:"Long-term asset owners (equity)",
-   blurb:"Institutions that acquire and hold the platforms and campuses — patient, low-cost-of-capital equity that increasingly displaces public-market and developer ownership.",
+  {bucket:"Long-term asset owners",
+   blurb:"Financial groups leaning into the space that want to own the assets — private equity, infrastructure funds, sovereign wealth and pensions acquiring and holding the platforms and campuses, increasingly displacing public-market and developer ownership.",
    items:[
-     {name:"Blue Owl Capital", tag:"Private capital / JV equity", note:"80% owner of Meta's Hyperion JV and co-owner of Stargate Abilene. Flexible equity for hyperscale developers — Meta's proven anchor partner."},
-     {name:"BlackRock / GIP + AIP", tag:"Infrastructure equity", note:"Co-owner of Aligned ($40B) and CyrusOne ($15B). AIP = BlackRock + GIP + MGX + Microsoft + NVIDIA — capital that is also a customer and supplier of AI."},
-     {name:"Blackstone", tag:"Infrastructure equity", note:"Owns QTS; bought AirTrunk (A$24B with CPP); JV with Digital Realty. The most active single owner in the sector."},
-     {name:"MGX", tag:"Sovereign AI capital (Abu Dhabi)", note:"Co-acquirer of Aligned; sovereign-scale equity pairing with BlackRock and GIP."},
-     {name:"KKR", tag:"Infrastructure equity", note:"Co-owns CyrusOne (with GIP) and is building a dedicated data center / power platform led by ex-AWS CEO Adam Selipsky."},
-     {name:"DigitalBridge · IFM · Silver Lake", tag:"Digital-infra & pension equity", note:"Own Switch; recapitalized Vantage ($9.2B). Pension and specialist capital seeking long-duration, inflation-linked cash flows."},
-     {name:"CPP Investments · Brookfield", tag:"Pension / infra funds", note:"CPP holds 12% of AirTrunk and develops via Goodman; Brookfield is deploying a $10B AI infrastructure fund toward up to $100B."}
+     {name:"Blue Owl Capital", tag:"Alternative asset manager", note:"~$270B AUM alternative manager with a large private-credit and real-assets franchise (~$190B); its Real Assets platform writes flexible triple-net and JV equity for hyperscale developers. A repeat counterparty on the largest AI campuses."},
+     {name:"BlackRock / GIP + AIP", tag:"Infrastructure equity", note:"World's largest asset manager; its GIP arm and the AI Infrastructure Partnership (BlackRock + GIP + MGX + Microsoft + NVIDIA) co-own Aligned ($40B) and CyrusOne ($15B) — capital that is also a customer and supplier of AI."},
+     {name:"Blackstone", tag:"Infrastructure equity", note:"The most active single owner in the sector: owns QTS, bought AirTrunk (A$24B with CPP), a $7B Digital Realty JV, and floated the BXDC data center REIT (2026). Also lends via Blackstone Credit."},
+     {name:"MGX · Mubadala", tag:"Sovereign AI capital (Abu Dhabi)", note:"MGX co-acquired Aligned and anchors the AI Infrastructure Partnership — sovereign-scale Abu Dhabi equity (Mubadala / G42) pairing with BlackRock and GIP."},
+     {name:"GIC · ADIA · PIF", tag:"Sovereign wealth", note:"Sovereign funds moving directly into digital infrastructure: GIC in hyperscale xScale JVs with Equinix; ADIA developing data centers with Brookfield; Saudi PIF deploying tens of billions across AI infrastructure at home and abroad."},
+     {name:"KKR", tag:"Infrastructure equity", note:"Co-owns CyrusOne (with GIP) and launched Helix Digital Infrastructure — a ~$10B AI data center / power platform led by ex-AWS CEO Adam Selipsky, anchored with NVIDIA, Vistra and the Kuwait Investment Authority."},
+     {name:"DigitalBridge · IFM · Silver Lake", tag:"Digital-infra & pension equity", note:"Own Switch and recapitalized Vantage ($9.2B). Specialist digital-infra and pension capital seeking long-duration, inflation-linked cash flows."},
+     {name:"CPP · Brookfield · Macquarie", tag:"Pension / infra funds", note:"CPP co-owns AirTrunk; Brookfield is deploying a $10B AI infrastructure fund (toward up to $100B) and partners with ADIA; Macquarie was Aligned's owner before the $40B sale."}
    ]},
-  {bucket:"Lenders (bond & balance sheet)",
-   blurb:"Providers of project bonds, private credit, and syndicated bank debt — increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
+  {bucket:"Lenders & bookrunners",
+   blurb:"Providers of project bonds, private credit and syndicated bank debt, plus the investment banks that arrange and place the paper — increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
    items:[
      {name:"PIMCO", tag:"Private credit / bond anchor", note:"~$18B anchor of Meta's $27.3B Hyperion SPV bond; also anchored Oracle's $16.3B Stargate financing."},
+     {name:"Apollo (Athene)", tag:"Private credit / insurance", note:"Led a $35B chip-backed facility with Blackstone and global banks (2026) — an SPV that buys Broadcom / Google-TPU silicon and leases it to Anthropic; Apollo's insurer Athene holds a large slice. Targets 20+ GW of compute through 2028."},
      {name:"Morgan Stanley", tag:"Investment bank / bookrunner", note:"Co-lead on Meta's El Paso package; ran the books on xAI's ~$5B Colossus notes + term loans (placed with investors, not held)."},
-     {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"Co-lead on El Paso; led the $7.1B initial and $9.6B Stargate Abilene construction debt."},
+     {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"Co-lead on El Paso; led the $7.1B initial construction loan and follow-on debt at Stargate Abilene."},
+     {name:"Goldman Sachs · Citi · BofA · Barclays", tag:"Investment banks / bookrunners", note:"Among the joint lead bookrunners on Blackstone's $1.75B BXDC data center REIT IPO (2026) and recurring arrangers on hyperscale bond and loan financings."},
      {name:"BlackRock (debt)", tag:"Bond marketing", note:"Marketing Meta's $12B+ El Paso bond; also $3B+ of the Hyperion anchor."},
-     {name:"Magnetar Capital", tag:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed facilities — financing compute, not buildings."}
+     {name:"Magnetar Capital", tag:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed facilities — financing compute, not buildings."},
+     {name:"Carlyle · CDPQ · Coatue · Eldridge", tag:"Private credit / infra club", note:"Part of the broad private-credit and infrastructure syndicate behind CoreWeave's $2.3B and $7.5B GPU-backed facilities, alongside Blackstone, Magnetar, BlackRock and PIMCO."}
    ]},
-  {bucket:"Data center developers & GCs",
-   blurb:"The operators and general contractors that actually deliver campuses — the scarce delivery capacity behind every capacity target, and often the counterparty in a build-vs-partner decision.",
+  {bucket:"Data center developers & operators",
+   blurb:"The platforms that build, own and lease hyperscale capacity — publicly-traded REITs and privately-held operators alike. They own the real estate, but as an operating business, distinct from the financial acquirers above; several have themselves been taken private by those owners. The lease-vs-build alternative to a hyperscaler self-funding.",
    items:[
-     {name:"Crusoe · Primary Digital", tag:"AI developer", note:"Develops and co-owns Stargate Abilene; vertically integrated with on-site power generation."},
-     {name:"Related Digital", tag:"Developer", note:"Develops Stargate Michigan (1 GW, $7B) with Oracle."},
-     {name:"Digital Realty · Vantage · QTS · Aligned · Switch", tag:"Hyperscale developers", note:"Wholesale developer-operators building to hyperscale spec, usually inside JV or platform structures."},
+     {name:"Digital Realty", tag:"Public REIT · wholesale", note:"NYSE: DLR. Owns and leases hyperscale and colocation capacity globally; a $7B development JV with Blackstone."},
+     {name:"Equinix", tag:"Public REIT · retail + xScale", note:"NASDAQ: EQIX. Global interconnection leader; its xScale JVs (incl. with GIC) target hyperscale capacity."},
+     {name:"Vantage Data Centers", tag:"PE-owned · wholesale", note:"Recapitalized by DigitalBridge + Silver Lake ($9.2B); a serial ABS issuer building the $25B Texas 'Frontier' campus."},
+     {name:"QTS", tag:"Blackstone-owned · wholesale", note:"Taken private by Blackstone ($10B, 2021); now one of the sector's most aggressive hyperscale developers."},
+     {name:"Aligned Data Centers", tag:"PE-owned · wholesale", note:"51 campuses, 6.4 GW; acquired by AIP / MGX / BlackRock GIP for $40B (2026)."},
+     {name:"CyrusOne", tag:"PE-owned · wholesale", note:"Taken private by KKR + GIP ($15B, 2022); global hyperscale fleet and development pipeline."},
+     {name:"Switch", tag:"PE-owned · wholesale", note:"Taken private by DigitalBridge + IFM ($11B, 2022); prime US campuses."},
+     {name:"Crusoe · Primary Digital · Related Digital", tag:"AI developers", note:"Vertically integrated AI-campus developers: Crusoe / Primary Digital co-own Stargate Abilene (with on-site power); Related Digital builds Stargate Michigan (1 GW, $7B) with Oracle."},
+     {name:"CoreWeave", tag:"AI cloud (neocloud)", note:"GPU-as-a-service backed by asset-level debt; a capacity provider to AI labs and hyperscalers."}
+   ]},
+  {bucket:"General contractors",
+   blurb:"The mission-critical builders that actually deliver the campuses — the scarce delivery capacity behind every capacity target, and often the counterparty in a build-vs-partner decision.",
+   items:[
      {name:"Turner Construction", tag:"General contractor", note:"Selected GC for Meta's $10B Lebanon, Indiana campus; ~$39B backlog, heavily data-center weighted."},
      {name:"Holder · DPR · Mortenson · Fortis", tag:"Mission-critical GCs", note:"Top hyperscale GCs. Mortenson and Fortis have built Meta campuses in Iowa and Oregon; DPR has delivered 1.5+ GW of critical load."}
    ]},
-  {bucket:"Power developers",
-   blurb:"Companies that develop and finance the electricity itself — behind-the-meter gas, fuel cells, and nuclear — plus the utilities and long-term PPAs that clear interconnection. Increasingly the gating item, ahead of the building.",
+  {bucket:"Power developers & utilities",
+   blurb:"Companies that develop and finance the electricity itself — behind-the-meter gas, fuel cells and nuclear — plus the utilities and long-term PPAs that clear interconnection. Increasingly the gating item, ahead of the building.",
    items:[
      {name:"GE Vernova", tag:"Turbines / on-site generation", note:"Gas-turbine order book full to 2029; 29 turbines (~1 GW) for Crusoe's Abilene campus; Chevron JV for co-located DC power."},
      {name:"SB Energy (SoftBank)", tag:"Powered-land developer", note:"Provides powered infrastructure for Stargate sites (e.g. Milam County) — a power developer anchoring the deal."},
      {name:"Constellation Energy", tag:"Nuclear PPA", note:"20-year, ~1.1 GW offtake with Meta from the Clinton Clean Energy Center starting 2027."},
      {name:"Bloom Energy", tag:"Fuel cells", note:"Solid-oxide on-site fuel cells; a fast-to-deploy BTM source scaling across data centers this decade."},
      {name:"Entergy · WEC · regulated utilities", tag:"Interconnection", note:"Host utilities (Entergy Louisiana for Hyperion, WEC for Microsoft Fairwater) providing the multi-GW grid capacity."}
-   ]},
-  {bucket:"Colocation providers",
-   blurb:"Wholesale and retail colo operators that lease capacity to hyperscalers — the alternative to self-build when the priority is speed to capacity.",
-   items:[
-     {name:"Equinix", tag:"Retail + xScale", note:"Global interconnection leader; xScale JV vehicles target hyperscale capacity."},
-     {name:"Digital Realty", tag:"Wholesale", note:"Hyperscale leases plus a $7B Blackstone development JV."},
-     {name:"QTS · CyrusOne · Aligned · Switch · Vantage", tag:"Hyperscale wholesale", note:"Privately-owned platforms delivering large leased blocks — the counterparties to a lease-vs-build decision."},
-     {name:"CoreWeave", tag:"AI cloud (neocloud)", note:"GPU-as-a-service backed by asset-level debt; a capacity provider to AI labs and hyperscalers."}
    ]}
 ];
 
