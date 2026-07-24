@@ -355,11 +355,11 @@ h1 em{font-style:normal;color:var(--meta);}
 
   <!-- platform capital -->
   <section class="platforms">
-    <h2 class="sec-title">Key stakeholders</h2>
+    <h2 class="sec-title">Key Stakeholders</h2>
     <p class="sec-sub">
-      The key partners a hyperscaler needs to negotiate with, grouped by the role they play in a data center deal —
-      from the financial institutions that finance the asset, to the developers, power partners, and colocation
-      providers.
+      The data center ecosystem spans financial institutions, developers, contractors and power partners. Scaling
+      capacity requires a deep understanding not only of each player's role, but of their requirements, return
+      objectives and desired outcomes.
     </p>
     <div id="stakeholders"></div>
   </section>
@@ -892,37 +892,6 @@ const DEALS = [
     ]
   },
   {
-    id:"coreweave", owner:"peer", status:"operating", external:true,
-    name:"CoreWeave (platform)", loc:"Roseland, New Jersey (HQ)",
-    lat:40.82, lon:-74.29, capital:7.5, capLabel:"$7.5B debt facility",
-    power:"Multi-site fleet", online:"Operating", confidence:"announced",
-    structure:"Asset-backed debt on GPU fleet",
-    summary:"AI cloud provider financed largely through debt secured on its GPU fleet and customer contracts. A $7.5B facility (May 2024) led by Blackstone and Magnetar followed an earlier $2.3B facility — with Coatue, Carlyle, CDPQ, BlackRock, PIMCO, Eldridge and others participating.",
-    tension:"The template for financing compute rather than buildings: the collateral is GPUs plus contracted revenue, and a wide club of private-credit and infrastructure lenders syndicates the risk. When banks won't hold single-name AI exposure, this is where it goes.",
-    terms:[
-      {k:"Equity", v:"VC + public (post-IPO)"},
-      {k:"Debt", v:"$7.5B (2024) + $2.3B (2023) facilities"},
-      {k:"Debt spread", v:null},
-      {k:"Collateral", v:"GPU fleet + customer contracts"},
-      {k:"Long-term owner", v:"CoreWeave (public)"}
-    ],
-    parties:[
-      {role:"Sponsor / operator", name:"CoreWeave"},
-      {role:"Lead lenders", name:"Blackstone; Magnetar"},
-      {role:"Participants", name:"Coatue, Carlyle, CDPQ, BlackRock, PIMCO, DigitalBridge Credit, Eldridge"},
-      {role:"Customers", name:"Microsoft and other AI labs"}
-    ],
-    stack:[
-      {band:"Debt", kind:"debt", party:"Blackstone / Magnetar — $7.5B", note:"Led the May 2024 facility with a broad private-credit club", pill:"$7.5B"},
-      {band:"Debt", kind:"debt", party:"Earlier $2.3B facility", note:"Magnetar + Blackstone Tactical Opportunities (2023)", pill:"$2.3B"},
-      {band:"Collateral", kind:"credit", party:"GPU fleet + contracts", note:"Asset-backed against compute and contracted revenue", pill:"ABL"}
-    ],
-    sources:[
-      {t:"Blackstone — $7.5B CoreWeave facility", u:"https://www.blackstone.com/news/press/coreweave-secures-7-5-billion-debt-financing-facility-led-by-blackstone-and-magnetar/"},
-      {t:"DCD — CoreWeave $7.5B debt", u:"https://www.datacenterdynamics.com/en/news/ai-cloud-firm-coreweave-raises-75-billion-in-debt-financing/"}
-    ]
-  },
-  {
     id:"digitalrealty", owner:"peer", status:"construction", external:true,
     name:"Digital Realty / Blackstone JV", loc:"Northern Virginia",
     lat:39.04, lon:-77.49, capital:7, capLabel:"$7B",
@@ -1010,57 +979,73 @@ const META_BS = [
 META_BS.forEach(m=>DEALS.push(metaBalanceSheet(m)));
 
 const STAKEHOLDERS = [
-  {bucket:"Long-term asset owners",
-   blurb:"Financial groups leaning into the space that want to own the assets — private equity, infrastructure funds, sovereign wealth and pensions acquiring and holding the platforms and campuses, increasingly displacing public-market and developer ownership.",
+  {bucket:"Long-term Asset Owners",
+   blurb:"The largest and most sophisticated pools of capital in the world — alternative asset managers, sovereign wealth funds and pensions. They are leaning into AI infrastructure as a durable, long-duration asset class and are eager to help create, own and hold the platforms and campuses that house it.",
    items:[
-     {name:"Blue Owl Capital", tag:"Alternative asset manager", note:"~$270B-AUM alternative manager built on direct lending and GP-stakes investing, with a fast-growing Real Assets arm that specializes in triple-net-lease and JV structures for mission-critical real estate. Has made digital infrastructure a signature vertical, writing large, patient equity checks alongside hyperscalers."},
-     {name:"BlackRock / GIP + AIP", tag:"Infrastructure equity", note:"The world's largest asset manager (~$12T). Its 2024 purchase of Global Infrastructure Partners added a top-tier infrastructure-equity franchise, which it has aimed squarely at AI through the AI Infrastructure Partnership with MGX, Microsoft and NVIDIA — making it both an owner of and a capital-formation engine for the build-out."},
-     {name:"Blackstone", tag:"Infrastructure equity", note:"The largest alternative-asset manager (~$1.1T), active across infrastructure, real estate and credit. Treats data centers as a defining thematic bet of the decade and has assembled a captive stable of operating platforms to express it — the most active financial owner in the sector."},
-     {name:"MGX · Mubadala", tag:"Sovereign AI capital (Abu Dhabi)", note:"Abu Dhabi's dedicated AI and advanced-technology investment vehicle, backed by Mubadala and G42. Built to deploy sovereign-scale capital into AI infrastructure worldwide, typically anchoring consortia beside the largest Western managers — the template for Gulf money entering US compute."},
-     {name:"GIC · ADIA · PIF", tag:"Sovereign wealth", note:"The major sovereign wealth funds — Singapore's GIC, Abu Dhabi's ADIA and Saudi Arabia's PIF — deploying long-duration capital directly into digital infrastructure, usually as LPs or JV partners beside specialist operators. Patient, size-agnostic money seeking long-life, inflation-linked assets."},
-     {name:"KKR", tag:"Infrastructure equity", note:"A ~$600B global investment firm with a large dedicated infrastructure business. Has made digital infrastructure and the power that feeds it a core theme, preferring to build and back operating platforms over one-off assets, frequently paired with strategic and sovereign co-investors."},
-     {name:"DigitalBridge · IFM · Silver Lake", tag:"Digital-infra & pension equity", note:"A representative trio of the operator-plus-patient-capital model: DigitalBridge is a pure-play digital-infrastructure manager, IFM an Australian pension-owned infra investor, and Silver Lake a leading technology PE firm — the kind of ownership base now standard in the sector."},
-     {name:"CPP · Brookfield · Macquarie", tag:"Pension / infra funds", note:"The heavyweight pension and infrastructure investors — Canada's CPP, Brookfield's ~$1T alternatives platform, and Australia's Macquarie. Long-horizon owners that built and traded the roads-and-ports of the analog economy and are now among the largest institutional holders of its digital equivalent."}
+     {name:"Blue Owl Capital", tag:"Alternative Asset Manager", note:"A ~$270B-AUM alternative asset manager anchored in direct lending and GP-stakes investing, with a fast-growing real-assets arm that specializes in triple-net-lease structures for mission-critical property. Digital infrastructure has become one of its signature verticals."},
+     {name:"BlackRock", tag:"Global Asset Manager", note:"The world's largest asset manager at ~$12T. Its 2024 acquisition of Global Infrastructure Partners and the launch of the AI Infrastructure Partnership give it a leading infrastructure-equity platform, and through its vast fixed-income franchise it is also a major buyer of the project bonds that fund campuses."},
+     {name:"Blackstone", tag:"Alternative Asset Manager", note:"The largest alternative asset manager at ~$1.1T, investing across private equity, real estate, infrastructure and credit — so it can take both the equity and the debt in a deal. It has made data centers a defining thematic bet and owns a captive stable of operating platforms."},
+     {name:"KKR", tag:"Alternative Asset Manager", note:"A ~$600B global investment firm with a large dedicated infrastructure business. It has made digital infrastructure and the power that feeds it a core theme, preferring to build and back operating platforms alongside strategic and sovereign co-investors."},
+     {name:"Brookfield", tag:"Alternative Asset Manager", note:"A ~$1T alternative asset manager with deep roots in infrastructure, real estate and renewable power. It is deploying large, purpose-built AI-infrastructure capital and frequently partners with sovereign co-investors on multi-billion-dollar developments."},
+     {name:"MGX", tag:"Sovereign AI Capital · Abu Dhabi", note:"Abu Dhabi's dedicated AI and advanced-technology investment vehicle, backed by Mubadala and G42. Purpose-built to deploy sovereign-scale capital into AI infrastructure worldwide, typically anchoring consortia beside the largest Western managers."},
+     {name:"GIC", tag:"Sovereign Wealth · Singapore", note:"Singapore's sovereign wealth fund, among the world's largest with an estimated $700B+ under management. A patient, globally diversified allocator that has moved directly into digital infrastructure, including hyperscale joint ventures with leading operators."},
+     {name:"ADIA", tag:"Sovereign Wealth · Abu Dhabi", note:"The Abu Dhabi Investment Authority, one of the oldest and largest sovereign wealth funds at roughly $1T. A long-horizon investor increasingly partnering with infrastructure specialists to develop and own data centers."},
+     {name:"PIF", tag:"Sovereign Wealth · Saudi Arabia", note:"Saudi Arabia's Public Investment Fund (~$900B), the engine of the Kingdom's economic diversification. It is deploying tens of billions into AI and digital infrastructure at home and abroad, often as a cornerstone investor."},
+     {name:"DigitalBridge", tag:"Digital-Infrastructure Manager", note:"A pure-play digital-infrastructure investment manager, spun out of the former Colony Capital, focused exclusively on data centers, towers, fiber and related assets — an operator-investor rather than a generalist allocator."},
+     {name:"IFM Investors", tag:"Pension Infrastructure Investor", note:"An Australian infrastructure manager owned by a group of pension funds, investing on behalf of retirement savers. It seeks long-duration, inflation-linked cash flows and holds core infrastructure, increasingly including data centers."},
+     {name:"Silver Lake", tag:"Technology Private Equity", note:"The leading technology-focused private equity firm, with ~$100B in AUM and a track record across software, internet and tech-enabled businesses. It brings sector expertise to digital-infrastructure recapitalizations."},
+     {name:"CPP Investments", tag:"Pension Fund · Canada", note:"The manager of the Canada Pension Plan (~C$700B) and among the most sophisticated institutional investors globally. A direct investor in infrastructure and real assets, including hyperscale data center platforms."},
+     {name:"Macquarie", tag:"Infrastructure Manager", note:"The Australian financial group whose asset-management arm is one of the world's largest infrastructure investors. A long-time builder and owner of core infrastructure — and a frequent seller of matured platforms to the next generation of owners."}
    ]},
-  {bucket:"Lenders & bookrunners",
-   blurb:"Providers of project bonds, private credit and syndicated bank debt, plus the investment banks that arrange and place the paper — increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
+  {bucket:"Lenders & Investment Bankers",
+   blurb:"The providers of debt and the banks that structure and place it — balance-sheet lenders, private credit, and the investment banks that arrange project bonds and syndicated facilities. Increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
    items:[
-     {name:"PIMCO", tag:"Private credit / bond anchor", note:"One of the world's largest fixed-income managers (~$2T), increasingly active in private and asset-based credit. A natural anchor buyer for the large, long-dated, investment-grade-like project bonds that hyperscale campuses now issue."},
-     {name:"Apollo (Athene)", tag:"Private credit / insurance", note:"A ~$700B alternative manager whose scale in insurance, via Athene, makes it a dominant force in investment-grade private credit — purpose-built to originate and hold the large, structured, long-duration financings bank balance sheets increasingly can't."},
-     {name:"Morgan Stanley", tag:"Investment bank / bookrunner", note:"A leading global investment bank and debt bookrunner. Its role is to structure and place paper with institutional investors rather than hold it — the arranger that turns a single AI campus or GPU cluster into a syndicated capital-markets product."},
-     {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"The largest US bank and a go-to lead arranger of construction loans and project debt across the build-out, bringing the balance sheet and syndication reach to underwrite multi-billion-dollar facilities and distribute them to the market."},
-     {name:"Goldman Sachs · Citi · BofA · Barclays", tag:"Investment banks / bookrunners", note:"The bulge-bracket bookrunning syndicate that recurs across hyperscale bond issues, REIT IPOs and leveraged financings — the distribution muscle that clears large data center paper into institutional hands."},
-     {name:"BlackRock (debt)", tag:"Private credit / bond markets", note:"Beyond its equity franchise, a major fixed-income and private-credit investor that also markets and anchors data center project bonds — able to sit on both sides of a deal, as sponsor-adjacent owner and as debt buyer."},
-     {name:"Magnetar Capital", tag:"Structured credit", note:"An alternative-credit specialist known for structured and asset-backed financings, and an early, sophisticated lender to the neocloud/GPU model — financing compute and contracted revenue where traditional banks won't lend."},
-     {name:"Carlyle · CDPQ · Coatue · Eldridge", tag:"Private credit / infra club", note:"A cross-section of the private-credit and infrastructure club now syndicating AI-infrastructure risk — a global PE firm, a Canadian pension, a tech crossover fund and a merchant-capital house — pooling to write facilities too large or too novel for any single lender."}
+     {name:"PIMCO", tag:"Fixed Income · Private Credit", note:"One of the world's largest fixed-income managers (~$2T), increasingly active in private and asset-based credit. A natural anchor buyer for the large, long-dated, investment-grade project bonds that hyperscale campuses now issue."},
+     {name:"Apollo", tag:"Private Credit · Insurance", note:"A ~$700B alternative manager whose scale in insurance, via Athene, makes it a dominant force in investment-grade private credit — built to originate and hold the large, structured, long-duration financings that bank balance sheets increasingly can't."},
+     {name:"Morgan Stanley", tag:"Investment Bank", note:"A leading global investment bank and debt bookrunner. Its role is to structure and place paper with institutional investors rather than hold it — turning a single campus or GPU cluster into a syndicated capital-markets product."},
+     {name:"JPMorgan", tag:"Balance-Sheet Lender · Investment Bank", note:"The largest US bank by assets and a premier lead arranger of construction loans and project debt. It brings the balance sheet and syndication reach to underwrite multi-billion-dollar facilities and distribute them to the market."},
+     {name:"Goldman Sachs", tag:"Investment Bank", note:"A premier global investment bank, leading in M&A advisory, financing and capital markets. A recurring structurer and bookrunner on the largest digital-infrastructure bond and loan financings."},
+     {name:"Citi", tag:"Investment Bank", note:"One of the most globally interconnected banks, with deep debt capital markets and corporate banking franchises. A frequent joint bookrunner and lender across hyperscale and REIT financings."},
+     {name:"Bank of America", tag:"Investment Bank", note:"A leading US bank with a top-tier debt capital markets and lending platform, and a recurring arranger and bookrunner on hyperscale bond issues and syndicated facilities."},
+     {name:"Barclays", tag:"Investment Bank", note:"A global investment bank with a strong debt-financing and capital-markets franchise, and a recurring bookrunner on data center and infrastructure bond and loan deals."},
+     {name:"Magnetar Capital", tag:"Structured Credit", note:"An alternative-credit specialist known for structured and asset-backed financings, and an early, sophisticated lender to the neocloud/GPU model — financing compute and contracted revenue where traditional banks won't lend."},
+     {name:"Carlyle", tag:"Private Credit", note:"A ~$450B global investment firm with a large and growing private-credit platform, a participant in the syndicated facilities that finance AI infrastructure and compute."},
+     {name:"CDPQ", tag:"Pension · Private Credit", note:"Québec's ~C$450B pension manager and a major global infrastructure and private-credit investor, co-investing in large, long-duration digital-infrastructure financings."},
+     {name:"Coatue", tag:"Crossover · Structured Credit", note:"A technology-focused crossover investment firm active across venture, public equities and structured credit — a provider of flexible capital into AI compute and infrastructure."},
+     {name:"Eldridge", tag:"Merchant Capital", note:"A diversified holding and merchant-capital firm that deploys balance-sheet capital across credit and technology, participating in bespoke private financings for AI infrastructure."}
    ]},
-  {bucket:"Data center developers & operators",
-   blurb:"The platforms that build, own and lease hyperscale capacity — publicly-traded REITs and privately-held operators alike. They own the real estate, but as an operating business, distinct from the financial acquirers above; several have themselves been taken private by those owners. The lease-vs-build alternative to a hyperscaler self-funding.",
+  {bucket:"Data Center Developers & Operators",
+   blurb:"The platforms that design, build, own and lease hyperscale capacity — public REITs and privately held developers alike. They own and operate the real estate as a business, offering hyperscalers a lease-versus-build alternative to self-funding.",
    items:[
-     {name:"Digital Realty", tag:"Public REIT · wholesale", note:"NYSE: DLR — one of the two large public data center REITs, with a global portfolio of hyperscale and colocation capacity. Increasingly funds growth through JVs and private capital rather than its balance sheet alone."},
-     {name:"Equinix", tag:"Public REIT · retail + xScale", note:"NASDAQ: EQIX — the global interconnection and colocation leader, anchored by a dense network of carrier-neutral facilities. Its xScale JV program extends the model into hyperscale, funded with institutional partners."},
-     {name:"Vantage Data Centers", tag:"PE-owned · wholesale", note:"A privately held wholesale developer focused on large hyperscale campuses, and one of the sector's most sophisticated users of asset-backed securitization to fund its growth."},
-     {name:"QTS", tag:"Blackstone-owned · wholesale", note:"A hyperscale and wholesale operator taken private by Blackstone, now one of the most aggressive campus developers in the US — the archetype of a public REIT reborn as a captive private development platform."},
-     {name:"Aligned Data Centers", tag:"PE-owned · wholesale", note:"A fast-growing wholesale operator across the Americas, built around adaptive cooling and speed-to-power, now owned by a BlackRock-led sovereign and infrastructure consortium — a platform, not a project, changing hands."},
-     {name:"CyrusOne", tag:"PE-owned · wholesale", note:"A global wholesale operator with a large hyperscale footprint, taken private by KKR and GIP in the deal that opened the mega take-private era in the sector."},
-     {name:"Switch", tag:"PE-owned · wholesale", note:"A US wholesale operator known for its large, high-density flagship campuses, taken private by DigitalBridge and IFM — prime real estate paired with patient institutional ownership."},
-     {name:"Crusoe · Primary Digital · Related Digital", tag:"AI developers", note:"The new breed of vertically integrated AI-campus developers — combining powered land, on-site generation and rapid construction to stand up gigawatt sites at a speed legacy REITs can't match."},
-     {name:"CoreWeave", tag:"AI cloud (neocloud)", note:"The leading 'neocloud' — a GPU-as-a-service provider that rents AI compute to labs and hyperscalers, financed largely against its chips and contracts. The capacity layer between the chipmakers and the AI labs."}
+     {name:"Digital Realty", tag:"Public REIT", note:"NYSE: DLR — one of the two large public data center REITs, with a global portfolio of hyperscale and colocation facilities. It increasingly funds growth through joint ventures and private capital."},
+     {name:"Equinix", tag:"Public REIT", note:"NASDAQ: EQIX — the global interconnection and colocation leader, built on a dense network of carrier-neutral facilities. Its xScale program extends the platform into hyperscale via institutional JVs."},
+     {name:"Vantage Data Centers", tag:"Developer", note:"A privately held wholesale developer focused on large hyperscale campuses across the Americas, EMEA and APAC, and one of the sector's most sophisticated users of asset-backed securitization to fund construction."},
+     {name:"QTS", tag:"Developer", note:"A hyperscale and wholesale developer, taken private by Blackstone in 2021, that designs, builds and leases large campuses — now among the most aggressive US developers on the back of its owner's capital."},
+     {name:"Aligned Data Centers", tag:"Developer", note:"A wholesale developer and operator across the Americas, differentiated by adaptive, high-density cooling and speed-to-power. It designs, builds and operates campuses for hyperscale and AI tenants."},
+     {name:"CyrusOne", tag:"Developer", note:"A global wholesale developer and operator with a large hyperscale footprint and development pipeline, taken private by KKR and GIP. It builds and leases capacity to the largest cloud and AI tenants."},
+     {name:"Switch", tag:"Developer", note:"A US wholesale developer and operator known for its large, high-density flagship campuses, taken private by DigitalBridge and IFM. It designs, builds and operates prime data center real estate."},
+     {name:"Crusoe", tag:"Developer · On-site Power", note:"A vertically integrated AI-infrastructure developer that pairs data center construction with on-site power generation, targeting rapid delivery of gigawatt-scale campuses for AI workloads."},
+     {name:"Primary Digital Infrastructure", tag:"Developer", note:"An AI-infrastructure developer and investor that co-develops and capitalizes large hyperscale campuses, partnering with operators and credit providers on gigawatt-scale sites."},
+     {name:"Related Digital", tag:"Developer", note:"The data center development arm of Related Companies, a major US real estate developer, building large hyperscale campuses in partnership with cloud and AI anchors."}
    ]},
-  {bucket:"General contractors",
-   blurb:"The mission-critical builders that actually deliver the campuses — the scarce delivery capacity behind every capacity target, and often the counterparty in a build-vs-partner decision.",
+  {bucket:"General Contractors",
+   blurb:"The mission-critical builders that actually deliver the campuses. Their crews and schedules are a scarce input behind every capacity target, and often the counterparty in a build-versus-partner decision.",
    items:[
-     {name:"Turner Construction", tag:"General contractor", note:"One of the largest US builders, with a mission-critical practice that has made data centers a dominant share of its ~$39B backlog. At this scale, delivery capacity itself is a scarce, contested input to hitting capacity targets."},
-     {name:"Holder · DPR · Mortenson · Fortis", tag:"Mission-critical GCs", note:"The specialist mission-critical general contractors that actually build hyperscale campuses — a short list of firms with the crews, safety record and power-and-cooling expertise to deliver gigawatts on schedule."}
+     {name:"Turner Construction", tag:"General Contractor", note:"One of the largest US general contractors, whose mission-critical practice has made data centers a dominant share of its ~$39B backlog. At this scale, delivery capacity is itself a scarce, contested input."},
+     {name:"Holder Construction", tag:"General Contractor", note:"A leading mission-critical general contractor with a large, specialized data center practice, delivering hyperscale campuses for major cloud and internet operators."},
+     {name:"DPR Construction", tag:"General Contractor", note:"A national technical builder with deep mission-critical expertise, having delivered well over a gigawatt of critical data center load for hyperscale clients."},
+     {name:"Mortenson", tag:"General Contractor", note:"A US builder with a strong data center and mission-critical practice and a long track record delivering campuses for hyperscalers, including Meta."},
+     {name:"Fortis Construction", tag:"General Contractor", note:"A mission-critical general contractor specializing in large data center builds, with a portfolio of hyperscale campuses across the US."}
    ]},
-  {bucket:"Power developers & utilities",
-   blurb:"Companies that develop and finance the electricity itself — behind-the-meter gas, fuel cells and nuclear — plus the utilities and long-term PPAs that clear interconnection. Increasingly the gating item, ahead of the building.",
+  {bucket:"Energy",
+   blurb:"The companies that generate, supply and interconnect the power — behind-the-meter gas and fuel cells, nuclear and clean-energy PPAs, and the regulated utilities that clear interconnection. Increasingly the true gating item, ahead of the building.",
    items:[
-     {name:"GE Vernova", tag:"Turbines / on-site generation", note:"The power-equipment giant spun out of GE and the key supplier of gas turbines for behind-the-meter generation. Its order book is effectively sold out for years, making turbine slots a gating constraint on new capacity."},
-     {name:"SB Energy (SoftBank)", tag:"Powered-land developer", note:"A SoftBank-owned renewables and powered-land developer that assembles interconnection, generation and sites — anchoring data center deals as the power partner rather than the real-estate one."},
-     {name:"Constellation Energy", tag:"Nuclear PPA", note:"The largest US operator of nuclear plants and a leading clean-power supplier to data centers, structuring long-term PPAs — and reactor restarts — to match hyperscaler demand for firm, carbon-free power."},
-     {name:"Bloom Energy", tag:"Fuel cells", note:"A maker of solid-oxide fuel cells that provide fast-to-deploy, on-site power — an increasingly used bridge around utility interconnection queues for data centers."},
-     {name:"Entergy · WEC · regulated utilities", tag:"Interconnection", note:"The host utilities that ultimately deliver multi-gigawatt grid capacity. Their interconnection timelines and rate structures are often the real determinant of when — and where — a campus can be built."}
+     {name:"GE Vernova", tag:"Turbines · Generation", note:"The power-equipment company spun out of GE and a key supplier of gas turbines for behind-the-meter generation. Its order book is effectively sold out for years, making turbine slots a gating constraint on new capacity."},
+     {name:"SB Energy", tag:"Powered-Land Developer", note:"A SoftBank-owned renewables and powered-land developer that assembles interconnection, generation and sites — anchoring data center deals as the power partner rather than the real-estate one."},
+     {name:"Constellation Energy", tag:"Nuclear · Power", note:"The largest US operator of nuclear plants and a leading supplier of firm, carbon-free power to data centers, structuring long-term PPAs and reactor restarts to match hyperscaler demand."},
+     {name:"Bloom Energy", tag:"Fuel Cells", note:"A maker of solid-oxide fuel cells that deliver fast-to-deploy, on-site power — an increasingly used bridge around utility interconnection queues."},
+     {name:"Entergy", tag:"Regulated Utility", note:"The regulated utility serving much of the Gulf South and the interconnecting utility for large Louisiana and Texas campuses. Its generation and grid plans shape where multi-gigawatt load can land."},
+     {name:"WEC Energy Group", tag:"Regulated Utility", note:"A Midwest regulated utility whose service territory hosts major hyperscale demand. Its capacity additions and interconnection timelines directly determine campus schedules."}
    ]}
 ];
 
