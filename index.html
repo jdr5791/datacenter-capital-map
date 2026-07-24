@@ -163,6 +163,7 @@ h1 em{font-style:normal;color:var(--meta);}
 .met:last-child{border-right:none;}
 .met-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--steel);display:block;margin-bottom:5px;}
 .met-v{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;color:var(--sand);}
+.dsr-foot{padding:9px 16px;border-bottom:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--steel);line-height:1.5;}
 
 .dsr-body{padding:22px 26px;overflow-y:auto;flex:1;min-height:0;}
 .sect{margin-bottom:26px;}
@@ -302,7 +303,7 @@ h1 em{font-style:normal;color:var(--meta);}
   <!-- hero -->
   <header class="hero">
     <div class="eyebrow">Data center capacity · capital &amp; partnerships</div>
-    <h1>Overview of US data centers <em>under construction, recently delivered, and sold or recapitalized.</em></h1>
+    <h1>Overview of US data centers <em>under construction and recently delivered</em>, and the capital and partners behind them.</h1>
     <p class="lede">
       Due to the significant capital requirements, existing power constraints, and execution risks, increasing AI
       capacity depends on a variety of strong relationships throughout the data center life cycle. This map plots
@@ -320,7 +321,6 @@ h1 em{font-style:normal;color:var(--meta);}
     <button class="chip" data-filter="meta" aria-pressed="false">Meta</button>
     <button class="chip" data-filter="construction" aria-pressed="false">Under construction</button>
     <button class="chip" data-filter="operating" aria-pressed="false">Recently delivered</button>
-    <button class="chip" data-filter="sold" aria-pressed="false">Sold / recapitalized</button>
   </div>
 
   <!-- legend -->
@@ -328,7 +328,6 @@ h1 em{font-style:normal;color:var(--meta);}
     <span class="lg"><span class="dot meta"></span> Meta</span>
     <span class="lg"><span class="dot construction"></span> Under construction</span>
     <span class="lg"><span class="dot operating"></span> Recently delivered</span>
-    <span class="lg"><span class="dot sold"></span> Sold / recapitalized</span>
     <span class="lg lg-scale">
       <i style="width:7px;height:7px"></i><i style="width:12px;height:12px"></i><i style="width:19px;height:19px"></i>
       &nbsp;Marker area ∝ capacity (MW/GW) · smallest = not disclosed
@@ -445,7 +444,7 @@ const DEALS = [
     power:"~1 GW", online:"2028", confidence:"reported",
     structure:"Project-level debt / bond",
     summary:"Meta is funding the El Paso campus largely with project-level debt — a ~$13B package led by Morgan Stanley and JPMorgan, with BlackRock marketing a $12B+ bond against the site. By carrying a smaller equity slice and more direct ownership than the Hyperion JV, Meta keeps control of the asset while still moving the funding off its corporate balance sheet — a second capacity-scaling template that trades the JV partner for the bond market.",
-    tension:"This is the live one, and it shows Meta building optionality across structures. As of late July 2026, BlackRock is marketing a $12B+ bond against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same single-tenant credit logic as Hyperion, expressed through debt instead of a JV, and giving Meta a second reusable playbook for adding ~1 GW without competing with compute for capital.",
+    tension:"This is the live one, and it shows Meta building optionality across structures. As of late July 2026, BlackRock is marketing a $12B+ bond against the campus, with the two banks running investor calls. It is project-level financing secured against a long-term lease to a single creditworthy tenant — the same single-tenant credit logic as Hyperion, expressed through debt instead of a JV, and giving Meta a second reusable playbook for adding ~1 GW without competing with compute for capital. It also showcases Meta's ability to secure attractive financing: on the comparable Hyperion bond, Meta's payment and residual-value guarantees priced the paper at just T+225 — roughly one notch off its own AA- — and the El Paso bond is expected to clear on similarly tight terms, a cost of capital few counterparties can command.",
     terms:[
       {k:"Equity", v:"Meta (smaller slice; more direct ownership)"},
       {k:"Bond issued", v:"$12B+ marketed by BlackRock (as of late Jul 2026)"},
@@ -478,11 +477,11 @@ const DEALS = [
   {
     id:"prometheus", owner:"meta", status:"operating", external:false,
     name:"Prometheus", loc:"New Albany, Ohio",
-    lat:40.08, lon:-82.80, capital:5, capLabel:"Not disclosed",
+    lat:40.08, lon:-82.80, capital:5, capLabel:"Not Disclosed",
     power:"1 GW", online:"2026", confidence:"announced",
     structure:"Balance sheet",
     summary:"Meta's first gigawatt-scale AI supercluster, on the New Albany campus where Meta has operated since 2017. No external capital partner announced — this one sits on Meta's own balance sheet and is the design template Hyperion is built from.",
-    tension:"Speed was the governing constraint: the buildout used aluminum tent structures with weatherproof fabric to start compute sooner, and on-site gas turbines rather than waiting on utility interconnection. Prometheus proves the delivery model that Hyperion then wraps in outside capital.",
+    tension:"Speed was the governing constraint: the buildout used aluminum tent structures with weatherproof fabric to start compute sooner, and on-site gas turbines rather than waiting on utility interconnection. Prometheus proves the delivery model that Hyperion then wraps in outside capital. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -516,7 +515,7 @@ const DEALS = [
     power:"~1 GW", online:"2027", confidence:"announced",
     structure:"Balance sheet",
     summary:"A 4 million sq ft campus across 13 buildings — 10 data center buildings, a network facility, a logistics warehouse and an administrative building. Peak construction is expected to draw more than 4,000 workers.",
-    tension:"Roughly the same gigawatt of capacity as Hyperion's first phase, at a fraction of the announced capital and with no external partner. Useful as a control: it isolates how much of Hyperion's $27B is power and long-lived infrastructure rather than data center shell.",
+    tension:"Roughly the same gigawatt of capacity as Hyperion's first phase, at a fraction of the announced capital and with no external partner. Useful as a control: it isolates how much of Hyperion's $27B is power and long-lived infrastructure rather than data center shell. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -544,10 +543,10 @@ const DEALS = [
     id:"cheyenne", owner:"meta", status:"construction", external:false,
     name:"Cheyenne Campus", loc:"Cheyenne, Wyoming",
     lat:41.14, lon:-104.82, capital:0.8, capLabel:"$800M+",
-    power:"Not disclosed", online:"2026", confidence:"announced",
+    power:"Not Disclosed", online:"2026", confidence:"announced",
     structure:"Balance sheet",
     summary:"Meta's first Wyoming data center — a 715,000 sq ft campus that broke ground in 2024 to support expanding infrastructure needs.",
-    tension:"Sited for power and land economics in a low-cost, low-population grid. The site has drawn scrutiny over a contractor's alleged discharge of contaminated wastewater — a reminder that environmental/permitting execution is a schedule risk even on self-funded builds.",
+    tension:"Sited for power and land economics in a low-cost, low-population grid, with strategic proximity to the Denver / Front Range metro. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -571,10 +570,10 @@ const DEALS = [
     id:"beaverdam", owner:"meta", status:"construction", external:false,
     name:"Beaver Dam", loc:"Beaver Dam, Wisconsin",
     lat:43.46, lon:-88.84, capital:1, capLabel:"$1B+",
-    power:"Not disclosed", online:"2027", confidence:"announced",
+    power:"Not Disclosed", online:"2027", confidence:"announced",
     structure:"Balance sheet",
     summary:"A 700,000+ sq ft AI-optimized campus representing over $1B of investment, using closed-loop liquid cooling that requires zero water for most of the year.",
-    tension:"Cooling architecture is becoming a siting variable, not just an engineering one. A closed-loop design removes water availability from the permitting conversation — which in contested jurisdictions can matter more to schedule than capital cost.",
+    tension:"Cooling architecture is becoming a siting variable, not just an engineering one. A closed-loop design removes water availability from the permitting conversation — which in contested jurisdictions can matter more to schedule than capital cost. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -598,10 +597,10 @@ const DEALS = [
     id:"montgomery", owner:"meta", status:"construction", external:false,
     name:"Montgomery", loc:"Montgomery County, Alabama",
     lat:32.37, lon:-86.30, capital:1.5, capLabel:"$1.5B+",
-    power:"Not disclosed", online:"In construction", confidence:"announced",
+    power:"Not Disclosed", online:"Under construction", confidence:"announced",
     structure:"Balance sheet",
     summary:"An AI-optimized campus of nearly 1.3 million sq ft, representing more than $1.5B of investment.",
-    tension:"Part of the second tier of AI-optimized campuses — large by any historical standard, but an order of magnitude below the titan clusters that are attracting outside capital.",
+    tension:"Part of the second tier of AI-optimized campuses — large by any historical standard, but an order of magnitude below the titan clusters that are attracting outside capital. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -624,10 +623,10 @@ const DEALS = [
     id:"rosemount", owner:"meta", status:"construction", external:false,
     name:"Rosemount", loc:"Rosemount, Minnesota",
     lat:44.74, lon:-93.13, capital:0.8, capLabel:"$800M+",
-    power:"Not disclosed", online:"2026", confidence:"announced",
+    power:"Not Disclosed", online:"2026", confidence:"announced",
     structure:"Balance sheet + ground lease",
     summary:"A 715,000 sq ft campus representing $800M+ of investment, located on University of Minnesota property.",
-    tension:"Sited on university land — an institutional landowner rather than a developer counterparty. Ground-lease structures with public or quasi-public landlords carry different control and term risk than fee ownership.",
+    tension:"Sited on university land — an institutional landowner rather than a developer counterparty. Ground-lease structures with public or quasi-public landlords carry different control and term risk than fee ownership. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -652,10 +651,10 @@ const DEALS = [
     id:"jeffersonville", owner:"meta", status:"construction", external:false,
     name:"Jeffersonville", loc:"Jeffersonville, Indiana",
     lat:38.28, lon:-85.74, capital:0.8, capLabel:"$800M+",
-    power:"Not disclosed", online:"2026", confidence:"announced",
+    power:"Not Disclosed", online:"2026", confidence:"announced",
     structure:"Balance sheet",
     summary:"A 700,000 sq ft AI-optimized campus representing more than $800M of investment — Meta's second Indiana site alongside Lebanon.",
-    tension:"Clustering within a single utility territory concentrates both interconnection leverage and grid-side exposure. Two campuses in one state changes the negotiating posture with the utility.",
+    tension:"Clustering within a single utility territory concentrates both interconnection leverage and grid-side exposure. Two campuses in one state changes the negotiating posture with the utility. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None announced"},
@@ -678,10 +677,10 @@ const DEALS = [
     id:"loslunas", owner:"meta", status:"operating", external:false,
     name:"Los Lunas", loc:"Los Lunas, New Mexico",
     lat:34.81, lon:-106.73, capital:2, capLabel:"~$2B",
-    power:"Not disclosed", online:"Operating since 2019", confidence:"announced",
+    power:"Not Disclosed", online:"2019", confidence:"announced",
     structure:"Balance sheet",
     summary:"Eight buildings representing nearly $2B of cumulative investment. The first phase opened in February 2019.",
-    tension:"The pre-AI template: phased, self-funded, built out over years. The contrast with Hyperion and El Paso is the whole story — capacity used to be added incrementally from cash flow, and now it is assembled in single financings larger than the entire prior campus.",
+    tension:"The pre-AI template: phased, self-funded, built out over years. The contrast with Hyperion and El Paso is the whole story — capacity used to be added incrementally from cash flow, and now it is assembled in single financings larger than the entire prior campus. Held unlevered on Meta's balance sheet, it is also a potential cash-out opportunity — strong institutional appetite for data centers leased to an investment-grade tenant makes a future sale-leaseback a live option, freeing capital while Meta keeps operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None"},
@@ -705,7 +704,7 @@ const DEALS = [
     id:"stargate-abilene", owner:"peer", status:"construction", external:true,
     name:"Stargate — Abilene", loc:"Abilene, Texas",
     lat:32.45, lon:-99.73, capital:15, capLabel:"~$15B",
-    power:"1.2 GW", online:"Phased, operating 2025", confidence:"filed",
+    power:"1.2 GW", online:"2025", confidence:"filed",
     structure:"Dev JV + sale-leaseback",
     summary:"The flagship Stargate site. Crusoe and Blue Owl Capital co-own the campus through a JV (with Primary Digital Infrastructure), lease it to Oracle, which rents the compute to OpenAI. A May 2025 round added $11.6B — roughly $5B equity from Crusoe and Blue Owl plus ~$6.6B debt — on top of an initial $7.1B JPMorgan construction loan, bringing total committed capital to ~$15B.",
     tension:"The purest expression of the new stack: a developer/credit JV owns the shell, a hyperscaler (Oracle) signs the lease, and the AI lab (OpenAI) is the ultimate user. The lease to Oracle is what makes billions in bank debt financeable against a single site — the same single-tenant credit logic Meta uses at El Paso.",
@@ -743,7 +742,7 @@ const DEALS = [
     id:"stargate-michigan", owner:"peer", status:"construction", external:true,
     name:"Stargate — Michigan (“The Barn”)", loc:"Saline Township, Michigan",
     lat:42.17, lon:-83.78, capital:7, capLabel:"$7B",
-    power:"1 GW", online:"In development", confidence:"announced",
+    power:"1 GW", online:"Planned", confidence:"announced",
     structure:"Developer-led (Related Digital + Oracle)",
     summary:"A 1 GW, $7B campus developed by Related Digital with Oracle, announced October 2025 — three 550,000-sq-ft buildings on 250 acres. Part of OpenAI/Oracle/SoftBank's push to ~10 GW of Stargate capacity.",
     tension:"Different developer, same template as Abilene: a real-estate sponsor (Related) builds and owns, Oracle contracts the capacity. The proliferation of named developers is the market's answer to scale — no single balance sheet can carry 10 GW.",
@@ -772,8 +771,8 @@ const DEALS = [
   {
     id:"stargate-milam", owner:"peer", status:"construction", external:true,
     name:"Stargate — Milam County", loc:"Milam County, Texas",
-    lat:30.79, lon:-96.97, capital:5, capLabel:"Not disclosed",
-    power:"Multi-GW planned", online:"In development", confidence:"announced",
+    lat:30.79, lon:-96.97, capital:5, capLabel:"Not Disclosed",
+    power:"Multi-GW planned", online:"Planned", confidence:"announced",
     structure:"Powered-land partnership (SB Energy)",
     summary:"One of five Stargate sites announced September 2025, developed with SB Energy — a SoftBank company providing powered infrastructure for a fast-build data center site.",
     tension:"SB Energy's role is the tell: at this scale, the scarce asset is powered land, and a power developer, not a data center operator, anchors the deal. Interconnection and generation are increasingly the gating item, ahead of the shell.",
@@ -801,7 +800,7 @@ const DEALS = [
     id:"colossus", owner:"peer", status:"operating", external:true,
     name:"Colossus (xAI)", loc:"Memphis, Tennessee",
     lat:35.06, lon:-90.03, capital:10, capLabel:"$10B debt + equity",
-    power:"150 MW+ (expanding)", online:"Operating since 2024", confidence:"reported",
+    power:"150 MW+ (expanding)", online:"2024", confidence:"reported",
     structure:"Corporate debt secured on GPUs",
     summary:"xAI raised a combined $10B in debt and equity in 2025, including a ~$5B debt package that Morgan Stanley placed as bookrunner — a term loan B, a fixed-rate term loan, and senior secured notes, sold to global debt investors (Morgan Stanley ran the deal as investment bank; it did not hold the paper). The Colossus cluster near Memphis housed ~200,000 GPUs by mid-2025.",
     tension:"The collateral is the twist: lenders reportedly gained the right to take over Colossus and re-let it to other AI companies on default. Financing a depreciating GPU cluster is a fundamentally different credit than a leased building — the asset's residual value, not a tenant's covenant, backstops the debt.",
@@ -834,7 +833,7 @@ const DEALS = [
     id:"rainier", owner:"peer", status:"operating", external:false,
     name:"Project Rainier (AWS)", loc:"New Carlisle, Indiana",
     lat:41.70, lon:-86.51, capital:11, capLabel:"$11B",
-    power:"2.25 GW (planned)", online:"Operating Oct 2025", confidence:"announced",
+    power:"2.25 GW (planned)", online:"2025", confidence:"announced",
     structure:"Balance sheet + anchor customer",
     summary:"Amazon's $11B AI campus, opened October 2025, built around ~500,000 of its own Trainium2 chips dedicated to a single customer — Anthropic. Eighteen buildings operating, fourteen more under construction; 32 buildings / ~6.5M sq ft at full scale. Amazon does not separately disclose Rainier's financing in its SEC filings — the build is funded through Amazon's own capital expenditure, and its 10-K reports data center property and finance/operating leases only at the portfolio level, not by project.",
     tension:"The counterpoint to the JV wave: the largest AI campuses can still be built on a hyperscaler's own balance sheet when the chips and the customer are captive. Anthropic functions as the anchor tenant, but there is no external project-level capital and no project-specific financing disclosure — the credit lives at Amazon, not at the site.",
@@ -866,7 +865,7 @@ const DEALS = [
     id:"fairwater", owner:"peer", status:"operating", external:false,
     name:"Fairwater (Microsoft)", loc:"Mount Pleasant, Wisconsin",
     lat:42.70, lon:-87.90, capital:7.3, capLabel:"$7.3B",
-    power:"2.6 GW demand (corridor)", online:"Operating Jun 2026", confidence:"announced",
+    power:"2.6 GW demand (corridor)", online:"2026", confidence:"announced",
     structure:"Balance sheet",
     summary:"Microsoft's Fairwater campus — a $7.3B total investment (after a $3.3B first leg and a $4B expansion) that the company calls its most powerful AI data center. First facility became operational June 2026; a similarly sized second build follows over ~3 years.",
     tension:"Like AWS Rainier, this is a balance-sheet build — no outside project capital. The scarce input here is power: the utility (WEC) disclosed ~2.6 GW of new demand from Microsoft's I-94 corridor buildout, which is the real constraint on the schedule.",
@@ -896,7 +895,7 @@ const DEALS = [
     id:"coreweave", owner:"peer", status:"operating", external:true,
     name:"CoreWeave (platform)", loc:"Roseland, New Jersey (HQ)",
     lat:40.82, lon:-74.29, capital:7.5, capLabel:"$7.5B debt facility",
-    power:"Multi-site fleet", online:"Operating platform", confidence:"announced",
+    power:"Multi-site fleet", online:"Operating", confidence:"announced",
     structure:"Asset-backed debt on GPU fleet",
     summary:"AI cloud provider financed largely through debt secured on its GPU fleet and customer contracts. A $7.5B facility (May 2024) led by Blackstone and Magnetar followed an earlier $2.3B facility — with Coatue, Carlyle, CDPQ, BlackRock, PIMCO, Eldridge and others participating.",
     tension:"The template for financing compute rather than buildings: the collateral is GPUs plus contracted revenue, and a wide club of private-credit and infrastructure lenders syndicates the risk. When banks won't hold single-name AI exposure, this is where it goes.",
@@ -927,7 +926,7 @@ const DEALS = [
     id:"digitalrealty", owner:"peer", status:"construction", external:true,
     name:"Digital Realty / Blackstone JV", loc:"Northern Virginia",
     lat:39.04, lon:-77.49, capital:7, capLabel:"$7B",
-    power:"Not disclosed", online:"In development", confidence:"announced",
+    power:"Not Disclosed", online:"Planned", confidence:"announced",
     structure:"Development JV",
     summary:"A $7B hyperscale development joint venture between Digital Realty and Blackstone, targeting key markets including Northern Virginia and Silicon Valley.",
     tension:"The developer–capital partner archetype in its purest form: an operating platform that needs repeatable funding pairs with an institutional investor that wants exposure. The recurring friction in these vehicles is not returns but governance — valuation, funding milestones and exit rights.",
@@ -952,154 +951,6 @@ const DEALS = [
       {t:"A&O Shearman — data center JV structures", u:"https://www.aoshearman.com/en/insights/data-center-insights/joint-ventures-powering-the-data-center-build-out-three-partnerships-reshaping-the-market"}
     ]
   },
-
-  /* ---------------- SOLD / RECAPITALIZED (long-term owners) ---------------- */
-  {
-    id:"aligned", owner:"peer", status:"sold", external:true,
-    name:"Aligned Data Centers", loc:"Dallas, Texas (platform HQ)",
-    lat:32.78, lon:-96.80, capital:40, capLabel:"$40B acquisition",
-    power:"6.4 GW operational + planned", online:"Operating platform", confidence:"filed",
-    structure:"Platform acquisition (all-equity)",
-    summary:"In July 2026, AIP, MGX and BlackRock's GIP closed a $40B acquisition of 100% of Aligned Data Centers from Macquarie-managed funds — one of the largest private digital-infrastructure deals ever — plus a further $5B of growth capital. Aligned spans 51 campuses and 6.4 GW.",
-    tension:"Capital is no longer content to fund projects — it is buying the operating platforms outright. Owning the developer means owning the powered-land pipeline and the delivery team, which is the actual scarce asset. The buyers (BlackRock, Microsoft, NVIDIA-backed AIP, MGX) are also customers and suppliers of the AI build-out.",
-    terms:[
-      {k:"Equity", v:"$40B, 100% acquired (all-equity)"},
-      {k:"Growth capital", v:"+$5B committed"},
-      {k:"Seller", v:"Macquarie Asset Management funds"},
-      {k:"Portfolio", v:"51 campuses, 6.4 GW"},
-      {k:"Long-term owner", v:"AIP / MGX / BlackRock GIP"}
-    ],
-    parties:[
-      {role:"Acquirers (LPs)", name:"AI Infrastructure Partnership; MGX; BlackRock GIP"},
-      {role:"Seller", name:"Macquarie Asset Management funds"},
-      {role:"Target / operator", name:"Aligned Data Centers"},
-      {role:"Management", name:"Andrew Schaap (CEO), retained"}
-    ],
-    stack:[
-      {band:"Equity", kind:"equity", party:"AIP / MGX / BlackRock GIP", note:"Acquired 100% of the platform for $40B (all-equity)", pill:"100%"},
-      {band:"Growth", kind:"equity", party:"+$5B growth capital", note:"Committed to expand capacity for AI workloads", pill:"+$5B"},
-      {band:"Asset", kind:"credit", party:"Aligned operating platform", note:"51 campuses, 6.4 GW, powered-land pipeline and delivery team", pill:"Platform"}
-    ],
-    sources:[
-      {t:"Data Center Frontier — $40B Aligned deal", u:"https://www.datacenterfrontier.com/hyperscale/article/55323360/blackrock-led-consortium-to-acquire-aligned-data-centers-in-40-billion-ai-infrastructure-deal"},
-      {t:"GIP — acquisition of Aligned", u:"https://www.global-infra.com/news/ai-infrastructure-partnership-aip-mgx-and-blackrocks-global-infrastructure-partners-gip-to-acquire-all-equity-in-aligned-data-centers/"},
-      {t:"The National — +$5B commitment", u:"https://www.thenationalnews.com/future/technology/2026/07/21/blackrock-mgx-consortium-commits-5bn-for-aligned-data-centres-after-closing-acquisition/"}
-    ]
-  },
-  {
-    id:"cyrusone", owner:"peer", status:"sold", external:true,
-    name:"CyrusOne", loc:"Dallas–Fort Worth, Texas (platform HQ)",
-    lat:33.20, lon:-96.62, capital:15, capLabel:"$15B take-private",
-    power:"Global fleet", online:"Operating platform", confidence:"filed",
-    structure:"Take-private (REIT)",
-    summary:"KKR and Global Infrastructure Partners took CyrusOne private for ~$15B ($90.50/share incl. assumed debt) in a deal that closed in 2022 — at the time the largest M&A transaction in data center history.",
-    tension:"The first of the mega take-privates that turned public data center REITs into privately owned infrastructure. Institutional owners with long horizons and cheaper cost of capital displaced public-market shareholders — the same logic now playing out at platform scale with Aligned.",
-    terms:[
-      {k:"Equity", v:"$90.50/share, all-cash"},
-      {k:"Enterprise value", v:"~$15B incl. assumed debt"},
-      {k:"Seller", v:"Public shareholders (NASDAQ: CONE)"},
-      {k:"Long-term owner", v:"KKR + Global Infrastructure Partners"}
-    ],
-    parties:[
-      {role:"Acquirers (LPs)", name:"KKR; Global Infrastructure Partners"},
-      {role:"Target / operator", name:"CyrusOne"},
-      {role:"Seller", name:"Public shareholders"}
-    ],
-    stack:[
-      {band:"Equity", kind:"equity", party:"KKR + GIP", note:"$90.50/share all-cash take-private", pill:"100%"},
-      {band:"Debt", kind:"debt", party:"Assumed debt", note:"Rolled into ~$15B enterprise value", pill:"EV"},
-      {band:"Asset", kind:"credit", party:"CyrusOne platform", note:"Global data center fleet and development pipeline", pill:"Platform"}
-    ],
-    sources:[
-      {t:"DCD — KKR & GIP acquire CyrusOne for $15bn", u:"https://www.datacenterdynamics.com/en/news/confirmed-kkr-gip-acquire-cyrusone-for-15bn-american-tower-acquires-coresite/"},
-      {t:"Data Center Frontier — CyrusOne $15B", u:"https://www.datacenterfrontier.com/featured/article/11427810/kkr-gip-to-acquire-cyrusone-in-blockbuster-15-billion-deal"}
-    ]
-  },
-  {
-    id:"qts", owner:"peer", status:"sold", external:true,
-    name:"QTS Realty", loc:"Overland Park, Kansas (HQ)",
-    lat:38.98, lon:-94.68, capital:10, capLabel:"$10B take-private",
-    power:"7M+ sq ft", online:"Operating platform", confidence:"filed",
-    structure:"Take-private (REIT)",
-    summary:"Blackstone took QTS Realty Trust private for ~$10B, closing August 2021 — acquiring 7M+ sq ft of data center space across North America and Europe. QTS has since become one of the most aggressive hyperscale developers under Blackstone ownership.",
-    tension:"The deal that put Blackstone at the center of the build-out. Private ownership let QTS invest through cycles without quarterly earnings pressure — and gave Blackstone a captive development platform to pair with its infrastructure and credit funds.",
-    terms:[
-      {k:"Equity", v:"~$10B, all-cash"},
-      {k:"Seller", v:"Public shareholders (NYSE: QTS)"},
-      {k:"Portfolio", v:"7M+ sq ft, US + Europe"},
-      {k:"Long-term owner", v:"Blackstone (Infrastructure + funds)"}
-    ],
-    parties:[
-      {role:"Acquirer (LP)", name:"Blackstone"},
-      {role:"Target / operator", name:"QTS Realty Trust"},
-      {role:"Seller", name:"Public shareholders"}
-    ],
-    stack:[
-      {band:"Equity", kind:"equity", party:"Blackstone", note:"~$10B all-cash take-private (Aug 2021)", pill:"100%"},
-      {band:"Asset", kind:"credit", party:"QTS platform", note:"7M+ sq ft; now a core Blackstone development engine", pill:"Platform"}
-    ],
-    sources:[
-      {t:"Data Center Knowledge — Blackstone's $10B QTS deal", u:"https://www.datacenterknowledge.com/operations-and-management/blackstone-s-10b-deal-to-buy-data-center-giant-qts-the-context"}
-    ]
-  },
-  {
-    id:"switch", owner:"peer", status:"sold", external:true,
-    name:"Switch", loc:"Las Vegas, Nevada (HQ)",
-    lat:36.10, lon:-115.10, capital:11, capLabel:"$11B take-private",
-    power:"Multi-campus", online:"Operating platform", confidence:"filed",
-    structure:"Take-private (REIT)",
-    summary:"DigitalBridge and IFM Investors took Switch private for $11B, closing December 2022. DigitalBridge holds ~55.8%, IFM ~37.2%, management ~7.0%.",
-    tension:"A pension manager (IFM) sitting alongside a digital-infrastructure specialist (DigitalBridge) is the archetype of the new ownership base: patient institutional capital seeking long-duration, inflation-linked cash flows, paired with an operator that knows how to build.",
-    terms:[
-      {k:"Equity", v:"DigitalBridge 55.8% / IFM 37.2% / mgmt 7%"},
-      {k:"Enterprise value", v:"$11B"},
-      {k:"Seller", v:"Public shareholders (NYSE: SWCH)"},
-      {k:"Long-term owner", v:"DigitalBridge + IFM Investors"}
-    ],
-    parties:[
-      {role:"Acquirers (LPs)", name:"DigitalBridge; IFM Investors"},
-      {role:"Target / operator", name:"Switch"},
-      {role:"Seller", name:"Public shareholders"}
-    ],
-    stack:[
-      {band:"Equity", kind:"equity", party:"DigitalBridge — 55.8%", note:"Lead sponsor and operator", pill:"GP"},
-      {band:"Equity", kind:"equity", party:"IFM Investors — 37.2%", note:"Pension-backed long-term capital", pill:"LP"},
-      {band:"Asset", kind:"credit", party:"Switch platform", note:"Prime campuses across the US", pill:"Platform"}
-    ],
-    sources:[
-      {t:"DCD — DigitalBridge & IFM complete Switch deal", u:"https://www.datacenterdynamics.com/en/news/digitalbridge-ifm-complete-switch-inc-acquisition/"},
-      {t:"DigitalBridge — $11B Switch take-private", u:"https://www.digitalbridge.com/news/2022-05-11-switch-to-be-taken-private-by-digitalbridge-investment-management-and-ifm-in-11-billion-transaction"}
-    ]
-  },
-  {
-    id:"vantage", owner:"peer", status:"sold", external:true,
-    name:"Vantage Data Centers", loc:"Denver, Colorado (HQ)",
-    lat:39.74, lon:-104.99, capital:9.2, capLabel:"$9.2B equity raise",
-    power:"Multi-GW incl. $25B TX campus", online:"Operating platform", confidence:"filed",
-    structure:"Equity recap + ABS issuer",
-    summary:"DigitalBridge and Silver Lake led a $9.2B equity investment in Vantage (completed 2024). Vantage is a serial securitizer — it issued the first North American, EMEA and APAC data center ABS — and is developing a $25B Texas “Frontier” mega-campus.",
-    tension:"Vantage shows how the two capital layers combine: a large private equity recap sets the ownership, while asset-backed securitization taps the bond market against stabilized, leased campuses. It is the developer that most resembles a capital-markets machine.",
-    terms:[
-      {k:"Equity", v:"$9.2B — DigitalBridge + Silver Lake (2024)"},
-      {k:"Debt", v:"Serial ABS / securitized notes (multi-region)"},
-      {k:"Development", v:"$25B Texas “Frontier” mega-campus"},
-      {k:"Long-term owner", v:"DigitalBridge + Silver Lake"}
-    ],
-    parties:[
-      {role:"Lead investors (LPs)", name:"DigitalBridge; Silver Lake"},
-      {role:"Operator / GP", name:"Vantage Data Centers"},
-      {role:"Debt markets", name:"ABS / securitized noteholders"}
-    ],
-    stack:[
-      {band:"Equity", kind:"equity", party:"DigitalBridge + Silver Lake", note:"$9.2B equity investment (2024)", pill:"Recap"},
-      {band:"Debt", kind:"debt", party:"Asset-backed securitization", note:"First data center ABS in North America, EMEA and APAC", pill:"ABS"},
-      {band:"Asset", kind:"credit", party:"Vantage platform", note:"Incl. the $25B Texas Frontier mega-campus", pill:"Platform"}
-    ],
-    sources:[
-      {t:"DigitalBridge — $9.2B Vantage investment", u:"https://www.digitalbridge.com/news/2024-06-13-vantage-data-centers-completes-92-billion-equity-investment-led-by-digitalbridge-and-silver-lake"},
-      {t:"Vantage — first euro data center ABS", u:"https://vantage-dc.com/news/vantage-data-centers-completes-industrys-first-euro-based-data-center-asset-backed-securitization-abs-with-e640m-transaction/"}
-    ]
-  }
 ];
 
 /* ---- Established / wholly-owned Meta campuses from datacenters.atmeta.com ----
@@ -1110,10 +961,10 @@ function metaBalanceSheet(m){
     id:m.id, owner:"meta", status:m.status, external:false,
     name:m.name, loc:m.loc, lat:m.lat, lon:m.lon,
     capital:m.capital, capLabel:m.capLabel,
-    power:m.power||"Not disclosed", online:m.online, confidence:"announced",
+    power:m.power||"Not Disclosed", online:m.online, confidence:"announced",
     structure:"Balance sheet",
     summary:m.note,
-    tension:"One of Meta's wholly-owned, balance-sheet-funded campuses. Meta has kept nearly its entire US fleet on its own balance sheet — only Hyperion (the Blue Owl JV) and El Paso (a project bond) bring in external capital, which is exactly what makes those two structures worth studying.",
+    tension:"One of Meta's wholly-owned, balance-sheet-funded campuses. Meta has kept nearly its entire US fleet on its own balance sheet — only Hyperion (the Blue Owl JV) and El Paso (a project bond) bring in external capital, which is exactly what makes those two structures worth studying. Each also represents a potential cash-out opportunity: with strong institutional appetite for data centers leased to an investment-grade tenant, Meta could recapitalize these unlevered assets via sale-leaseback while retaining operational control.",
     terms:[
       {k:"Equity", v:"Meta 100% (balance sheet)"},
       {k:"Debt", v:"None"},
@@ -1137,9 +988,9 @@ function metaBalanceSheet(m){
   };
 }
 const META_BS = [
-  {id:"prineville", name:"Prineville", loc:"Prineville, Oregon", lat:44.30, lon:-120.83, capital:2, capLabel:"Multi-phase since 2011", online:"Operating since 2011", status:"operating", note:"Meta's first data center campus, in continuous multi-phase expansion since 2011 — the origin of the balance-sheet build model."},
-  {id:"altoona", name:"Altoona", loc:"Altoona, Iowa", lat:41.64, lon:-93.46, capital:10, capLabel:"$10B+ (AI expansion)", online:"Operating + expanding", status:"construction", note:"A major general-compute campus given a $10B+ AI-focused expansion announced in 2024."},
-  {id:"forestcity", name:"Forest City", loc:"Rutherford County, North Carolina", lat:35.33, lon:-81.86, capital:1, capLabel:"Not disclosed", online:"Operating", status:"operating", note:"One of Meta's earliest campuses; site-level investment is not separately disclosed."},
+  {id:"prineville", name:"Prineville", loc:"Prineville, Oregon", lat:44.30, lon:-120.83, capital:2, capLabel:"Multi-phase since 2011", online:"2011", status:"operating", note:"Meta's first data center campus, in continuous multi-phase expansion since 2011 — the origin of the balance-sheet build model."},
+  {id:"altoona", name:"Altoona", loc:"Altoona, Iowa", lat:41.64, lon:-93.46, capital:10, capLabel:"$10B+ (AI expansion)", online:"Operating", status:"construction", note:"A major general-compute campus given a $10B+ AI-focused expansion announced in 2024."},
+  {id:"forestcity", name:"Forest City", loc:"Rutherford County, North Carolina", lat:35.33, lon:-81.86, capital:1, capLabel:"Not Disclosed", online:"Operating", status:"operating", note:"One of Meta's earliest campuses; site-level investment is not separately disclosed."},
   {id:"sarpy", name:"Sarpy / Papillion", loc:"Sarpy County, Nebraska", lat:41.15, lon:-96.04, capital:2.5, capLabel:"$2.5B+", online:"Operating", status:"operating", note:"Meta's Papillion, Nebraska campus — $2.5B+, broke ground 2017."},
   {id:"fortworth", name:"Fort Worth", loc:"Fort Worth, Texas", lat:32.75, lon:-97.33, capital:1.5, capLabel:"$1.5B+", online:"Operating", status:"operating", note:"A $1.5B+ Texas campus operating since the early 2020s (broke ground 2018)."},
   {id:"eaglemountain", name:"Eagle Mountain", loc:"Eagle Mountain, Utah", lat:40.31, lon:-112.01, capital:1.5, capLabel:"$1.5B", online:"Operating", status:"operating", note:"A $1.5B Utah campus built out over roughly six years."},
@@ -1147,14 +998,14 @@ const META_BS = [
   {id:"gallatin", name:"Gallatin", loc:"Gallatin, Tennessee", lat:36.39, lon:-86.45, capital:1.5, capLabel:"$1.5B+", online:"Operating", status:"operating", note:"Four data centers spanning ~1.6M sq ft; $1.5B+, broke ground 2020."},
   {id:"mesa", name:"Mesa", loc:"Mesa, Arizona", lat:33.42, lon:-111.74, capital:1, capLabel:"~$1B", online:"Operating", status:"operating", note:"A ~$1B campus in Mesa, Arizona."},
   {id:"temple", name:"Temple", loc:"Temple, Texas", lat:31.10, lon:-97.36, capital:0.8, capLabel:"$800M+", online:"Operating", status:"operating", note:"An $800M+ Texas campus (broke ground 2022)."},
-  {id:"tulsa", name:"Tulsa", loc:"Tulsa, Oklahoma", lat:36.15, lon:-95.99, capital:2, capLabel:"$2B+", online:"In construction", status:"construction", note:"A $2B+ Oklahoma campus."},
-  {id:"kansascity", name:"Kansas City", loc:"Kansas City, Missouri", lat:39.28, lon:-94.55, capital:2.5, capLabel:"$2.5B+", online:"In construction", status:"construction", note:"A $2.5B+ Kansas City, Missouri campus announced in 2024."},
-  {id:"stantonsprings", name:"Stanton Springs", loc:"Social Circle / Newton County, Georgia", lat:33.66, lon:-83.72, capital:10, capLabel:"$10B+", online:"In construction", status:"construction", note:"A major $10B+ Georgia campus that broke ground in 2025."},
-  {id:"huntsville", name:"Huntsville", loc:"Huntsville, Alabama", lat:34.73, lon:-86.59, capital:1.5, capLabel:"$1.5B+", online:"In construction", status:"construction", note:"A $1.5B+ AI-optimized Alabama campus announced in 2024."},
-  {id:"henrico", name:"Henrico", loc:"Henrico County, Virginia", lat:37.52, lon:-77.32, capital:1, capLabel:"$1B+", online:"In construction", status:"construction", note:"A $1B+ Virginia campus that broke ground in 2025."},
-  {id:"kuna", name:"Kuna", loc:"Kuna, Idaho", lat:43.49, lon:-116.42, capital:0.8, capLabel:"$800M+", online:"In construction", status:"construction", note:"A 960,000 sq ft Idaho campus, $800M+, breaking ground in 2025."},
-  {id:"bowlinggreen", name:"Bowling Green", loc:"Bowling Green, Ohio", lat:41.37, lon:-83.65, capital:0.8, capLabel:"$800M+", online:"In construction", status:"construction", note:"An $800M+ Ohio campus that broke ground in 2024."},
-  {id:"aiken", name:"Aiken", loc:"Aiken, South Carolina", lat:33.56, lon:-81.72, capital:0.8, capLabel:"$800M+", online:"In construction", status:"construction", note:"An $800M+ South Carolina campus that broke ground in 2024."}
+  {id:"tulsa", name:"Tulsa", loc:"Tulsa, Oklahoma", lat:36.15, lon:-95.99, capital:2, capLabel:"$2B+", online:"Under construction", status:"construction", note:"A $2B+ Oklahoma campus."},
+  {id:"kansascity", name:"Kansas City", loc:"Kansas City, Missouri", lat:39.28, lon:-94.55, capital:2.5, capLabel:"$2.5B+", online:"Under construction", status:"construction", note:"A $2.5B+ Kansas City, Missouri campus announced in 2024."},
+  {id:"stantonsprings", name:"Stanton Springs", loc:"Social Circle / Newton County, Georgia", lat:33.66, lon:-83.72, capital:10, capLabel:"$10B+", online:"Under construction", status:"construction", note:"A major $10B+ Georgia campus that broke ground in 2025."},
+  {id:"huntsville", name:"Huntsville", loc:"Huntsville, Alabama", lat:34.73, lon:-86.59, capital:1.5, capLabel:"$1.5B+", online:"Under construction", status:"construction", note:"A $1.5B+ AI-optimized Alabama campus announced in 2024."},
+  {id:"henrico", name:"Henrico", loc:"Henrico County, Virginia", lat:37.52, lon:-77.32, capital:1, capLabel:"$1B+", online:"Under construction", status:"construction", note:"A $1B+ Virginia campus that broke ground in 2025."},
+  {id:"kuna", name:"Kuna", loc:"Kuna, Idaho", lat:43.49, lon:-116.42, capital:0.8, capLabel:"$800M+", online:"Under construction", status:"construction", note:"A 960,000 sq ft Idaho campus, $800M+, breaking ground in 2025."},
+  {id:"bowlinggreen", name:"Bowling Green", loc:"Bowling Green, Ohio", lat:41.37, lon:-83.65, capital:0.8, capLabel:"$800M+", online:"Under construction", status:"construction", note:"An $800M+ Ohio campus that broke ground in 2024."},
+  {id:"aiken", name:"Aiken", loc:"Aiken, South Carolina", lat:33.56, lon:-81.72, capital:0.8, capLabel:"$800M+", online:"Under construction", status:"construction", note:"An $800M+ South Carolina campus that broke ground in 2024."}
 ];
 META_BS.forEach(m=>DEALS.push(metaBalanceSheet(m)));
 
@@ -1162,54 +1013,54 @@ const STAKEHOLDERS = [
   {bucket:"Long-term asset owners",
    blurb:"Financial groups leaning into the space that want to own the assets — private equity, infrastructure funds, sovereign wealth and pensions acquiring and holding the platforms and campuses, increasingly displacing public-market and developer ownership.",
    items:[
-     {name:"Blue Owl Capital", tag:"Alternative asset manager", note:"~$270B AUM alternative manager with a large private-credit and real-assets franchise (~$190B); its Real Assets platform writes flexible triple-net and JV equity for hyperscale developers. A repeat counterparty on the largest AI campuses."},
-     {name:"BlackRock / GIP + AIP", tag:"Infrastructure equity", note:"World's largest asset manager; its GIP arm and the AI Infrastructure Partnership (BlackRock + GIP + MGX + Microsoft + NVIDIA) co-own Aligned ($40B) and CyrusOne ($15B) — capital that is also a customer and supplier of AI."},
-     {name:"Blackstone", tag:"Infrastructure equity", note:"The most active single owner in the sector: owns QTS, bought AirTrunk (A$24B with CPP), a $7B Digital Realty JV, and floated the BXDC data center REIT (2026). Also lends via Blackstone Credit."},
-     {name:"MGX · Mubadala", tag:"Sovereign AI capital (Abu Dhabi)", note:"MGX co-acquired Aligned and anchors the AI Infrastructure Partnership — sovereign-scale Abu Dhabi equity (Mubadala / G42) pairing with BlackRock and GIP."},
-     {name:"GIC · ADIA · PIF", tag:"Sovereign wealth", note:"Sovereign funds moving directly into digital infrastructure: GIC in hyperscale xScale JVs with Equinix; ADIA developing data centers with Brookfield; Saudi PIF deploying tens of billions across AI infrastructure at home and abroad."},
-     {name:"KKR", tag:"Infrastructure equity", note:"Co-owns CyrusOne (with GIP) and launched Helix Digital Infrastructure — a ~$10B AI data center / power platform led by ex-AWS CEO Adam Selipsky, anchored with NVIDIA, Vistra and the Kuwait Investment Authority."},
-     {name:"DigitalBridge · IFM · Silver Lake", tag:"Digital-infra & pension equity", note:"Own Switch and recapitalized Vantage ($9.2B). Specialist digital-infra and pension capital seeking long-duration, inflation-linked cash flows."},
-     {name:"CPP · Brookfield · Macquarie", tag:"Pension / infra funds", note:"CPP co-owns AirTrunk; Brookfield is deploying a $10B AI infrastructure fund (toward up to $100B) and partners with ADIA; Macquarie was Aligned's owner before the $40B sale."}
+     {name:"Blue Owl Capital", tag:"Alternative asset manager", note:"~$270B-AUM alternative manager built on direct lending and GP-stakes investing, with a fast-growing Real Assets arm that specializes in triple-net-lease and JV structures for mission-critical real estate. Has made digital infrastructure a signature vertical, writing large, patient equity checks alongside hyperscalers."},
+     {name:"BlackRock / GIP + AIP", tag:"Infrastructure equity", note:"The world's largest asset manager (~$12T). Its 2024 purchase of Global Infrastructure Partners added a top-tier infrastructure-equity franchise, which it has aimed squarely at AI through the AI Infrastructure Partnership with MGX, Microsoft and NVIDIA — making it both an owner of and a capital-formation engine for the build-out."},
+     {name:"Blackstone", tag:"Infrastructure equity", note:"The largest alternative-asset manager (~$1.1T), active across infrastructure, real estate and credit. Treats data centers as a defining thematic bet of the decade and has assembled a captive stable of operating platforms to express it — the most active financial owner in the sector."},
+     {name:"MGX · Mubadala", tag:"Sovereign AI capital (Abu Dhabi)", note:"Abu Dhabi's dedicated AI and advanced-technology investment vehicle, backed by Mubadala and G42. Built to deploy sovereign-scale capital into AI infrastructure worldwide, typically anchoring consortia beside the largest Western managers — the template for Gulf money entering US compute."},
+     {name:"GIC · ADIA · PIF", tag:"Sovereign wealth", note:"The major sovereign wealth funds — Singapore's GIC, Abu Dhabi's ADIA and Saudi Arabia's PIF — deploying long-duration capital directly into digital infrastructure, usually as LPs or JV partners beside specialist operators. Patient, size-agnostic money seeking long-life, inflation-linked assets."},
+     {name:"KKR", tag:"Infrastructure equity", note:"A ~$600B global investment firm with a large dedicated infrastructure business. Has made digital infrastructure and the power that feeds it a core theme, preferring to build and back operating platforms over one-off assets, frequently paired with strategic and sovereign co-investors."},
+     {name:"DigitalBridge · IFM · Silver Lake", tag:"Digital-infra & pension equity", note:"A representative trio of the operator-plus-patient-capital model: DigitalBridge is a pure-play digital-infrastructure manager, IFM an Australian pension-owned infra investor, and Silver Lake a leading technology PE firm — the kind of ownership base now standard in the sector."},
+     {name:"CPP · Brookfield · Macquarie", tag:"Pension / infra funds", note:"The heavyweight pension and infrastructure investors — Canada's CPP, Brookfield's ~$1T alternatives platform, and Australia's Macquarie. Long-horizon owners that built and traded the roads-and-ports of the analog economy and are now among the largest institutional holders of its digital equivalent."}
    ]},
   {bucket:"Lenders & bookrunners",
    blurb:"Providers of project bonds, private credit and syndicated bank debt, plus the investment banks that arrange and place the paper — increasingly the binding constraint at single-site scale, and the reason private credit keeps appearing across these deals.",
    items:[
-     {name:"PIMCO", tag:"Private credit / bond anchor", note:"~$18B anchor of Meta's $27.3B Hyperion SPV bond; also anchored Oracle's $16.3B Stargate financing."},
-     {name:"Apollo (Athene)", tag:"Private credit / insurance", note:"Led a $35B chip-backed facility with Blackstone and global banks (2026) — an SPV that buys Broadcom / Google-TPU silicon and leases it to Anthropic; Apollo's insurer Athene holds a large slice. Targets 20+ GW of compute through 2028."},
-     {name:"Morgan Stanley", tag:"Investment bank / bookrunner", note:"Co-lead on Meta's El Paso package; ran the books on xAI's ~$5B Colossus notes + term loans (placed with investors, not held)."},
-     {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"Co-lead on El Paso; led the $7.1B initial construction loan and follow-on debt at Stargate Abilene."},
-     {name:"Goldman Sachs · Citi · BofA · Barclays", tag:"Investment banks / bookrunners", note:"Among the joint lead bookrunners on Blackstone's $1.75B BXDC data center REIT IPO (2026) and recurring arrangers on hyperscale bond and loan financings."},
-     {name:"BlackRock (debt)", tag:"Bond marketing", note:"Marketing Meta's $12B+ El Paso bond; also $3B+ of the Hyperion anchor."},
-     {name:"Magnetar Capital", tag:"Structured credit", note:"Co-led CoreWeave's $2.3B and $7.5B GPU-backed facilities — financing compute, not buildings."},
-     {name:"Carlyle · CDPQ · Coatue · Eldridge", tag:"Private credit / infra club", note:"Part of the broad private-credit and infrastructure syndicate behind CoreWeave's $2.3B and $7.5B GPU-backed facilities, alongside Blackstone, Magnetar, BlackRock and PIMCO."}
+     {name:"PIMCO", tag:"Private credit / bond anchor", note:"One of the world's largest fixed-income managers (~$2T), increasingly active in private and asset-based credit. A natural anchor buyer for the large, long-dated, investment-grade-like project bonds that hyperscale campuses now issue."},
+     {name:"Apollo (Athene)", tag:"Private credit / insurance", note:"A ~$700B alternative manager whose scale in insurance, via Athene, makes it a dominant force in investment-grade private credit — purpose-built to originate and hold the large, structured, long-duration financings bank balance sheets increasingly can't."},
+     {name:"Morgan Stanley", tag:"Investment bank / bookrunner", note:"A leading global investment bank and debt bookrunner. Its role is to structure and place paper with institutional investors rather than hold it — the arranger that turns a single AI campus or GPU cluster into a syndicated capital-markets product."},
+     {name:"JPMorgan", tag:"Lead arranger / construction loan", note:"The largest US bank and a go-to lead arranger of construction loans and project debt across the build-out, bringing the balance sheet and syndication reach to underwrite multi-billion-dollar facilities and distribute them to the market."},
+     {name:"Goldman Sachs · Citi · BofA · Barclays", tag:"Investment banks / bookrunners", note:"The bulge-bracket bookrunning syndicate that recurs across hyperscale bond issues, REIT IPOs and leveraged financings — the distribution muscle that clears large data center paper into institutional hands."},
+     {name:"BlackRock (debt)", tag:"Private credit / bond markets", note:"Beyond its equity franchise, a major fixed-income and private-credit investor that also markets and anchors data center project bonds — able to sit on both sides of a deal, as sponsor-adjacent owner and as debt buyer."},
+     {name:"Magnetar Capital", tag:"Structured credit", note:"An alternative-credit specialist known for structured and asset-backed financings, and an early, sophisticated lender to the neocloud/GPU model — financing compute and contracted revenue where traditional banks won't lend."},
+     {name:"Carlyle · CDPQ · Coatue · Eldridge", tag:"Private credit / infra club", note:"A cross-section of the private-credit and infrastructure club now syndicating AI-infrastructure risk — a global PE firm, a Canadian pension, a tech crossover fund and a merchant-capital house — pooling to write facilities too large or too novel for any single lender."}
    ]},
   {bucket:"Data center developers & operators",
    blurb:"The platforms that build, own and lease hyperscale capacity — publicly-traded REITs and privately-held operators alike. They own the real estate, but as an operating business, distinct from the financial acquirers above; several have themselves been taken private by those owners. The lease-vs-build alternative to a hyperscaler self-funding.",
    items:[
-     {name:"Digital Realty", tag:"Public REIT · wholesale", note:"NYSE: DLR. Owns and leases hyperscale and colocation capacity globally; a $7B development JV with Blackstone."},
-     {name:"Equinix", tag:"Public REIT · retail + xScale", note:"NASDAQ: EQIX. Global interconnection leader; its xScale JVs (incl. with GIC) target hyperscale capacity."},
-     {name:"Vantage Data Centers", tag:"PE-owned · wholesale", note:"Recapitalized by DigitalBridge + Silver Lake ($9.2B); a serial ABS issuer building the $25B Texas 'Frontier' campus."},
-     {name:"QTS", tag:"Blackstone-owned · wholesale", note:"Taken private by Blackstone ($10B, 2021); now one of the sector's most aggressive hyperscale developers."},
-     {name:"Aligned Data Centers", tag:"PE-owned · wholesale", note:"51 campuses, 6.4 GW; acquired by AIP / MGX / BlackRock GIP for $40B (2026)."},
-     {name:"CyrusOne", tag:"PE-owned · wholesale", note:"Taken private by KKR + GIP ($15B, 2022); global hyperscale fleet and development pipeline."},
-     {name:"Switch", tag:"PE-owned · wholesale", note:"Taken private by DigitalBridge + IFM ($11B, 2022); prime US campuses."},
-     {name:"Crusoe · Primary Digital · Related Digital", tag:"AI developers", note:"Vertically integrated AI-campus developers: Crusoe / Primary Digital co-own Stargate Abilene (with on-site power); Related Digital builds Stargate Michigan (1 GW, $7B) with Oracle."},
-     {name:"CoreWeave", tag:"AI cloud (neocloud)", note:"GPU-as-a-service backed by asset-level debt; a capacity provider to AI labs and hyperscalers."}
+     {name:"Digital Realty", tag:"Public REIT · wholesale", note:"NYSE: DLR — one of the two large public data center REITs, with a global portfolio of hyperscale and colocation capacity. Increasingly funds growth through JVs and private capital rather than its balance sheet alone."},
+     {name:"Equinix", tag:"Public REIT · retail + xScale", note:"NASDAQ: EQIX — the global interconnection and colocation leader, anchored by a dense network of carrier-neutral facilities. Its xScale JV program extends the model into hyperscale, funded with institutional partners."},
+     {name:"Vantage Data Centers", tag:"PE-owned · wholesale", note:"A privately held wholesale developer focused on large hyperscale campuses, and one of the sector's most sophisticated users of asset-backed securitization to fund its growth."},
+     {name:"QTS", tag:"Blackstone-owned · wholesale", note:"A hyperscale and wholesale operator taken private by Blackstone, now one of the most aggressive campus developers in the US — the archetype of a public REIT reborn as a captive private development platform."},
+     {name:"Aligned Data Centers", tag:"PE-owned · wholesale", note:"A fast-growing wholesale operator across the Americas, built around adaptive cooling and speed-to-power, now owned by a BlackRock-led sovereign and infrastructure consortium — a platform, not a project, changing hands."},
+     {name:"CyrusOne", tag:"PE-owned · wholesale", note:"A global wholesale operator with a large hyperscale footprint, taken private by KKR and GIP in the deal that opened the mega take-private era in the sector."},
+     {name:"Switch", tag:"PE-owned · wholesale", note:"A US wholesale operator known for its large, high-density flagship campuses, taken private by DigitalBridge and IFM — prime real estate paired with patient institutional ownership."},
+     {name:"Crusoe · Primary Digital · Related Digital", tag:"AI developers", note:"The new breed of vertically integrated AI-campus developers — combining powered land, on-site generation and rapid construction to stand up gigawatt sites at a speed legacy REITs can't match."},
+     {name:"CoreWeave", tag:"AI cloud (neocloud)", note:"The leading 'neocloud' — a GPU-as-a-service provider that rents AI compute to labs and hyperscalers, financed largely against its chips and contracts. The capacity layer between the chipmakers and the AI labs."}
    ]},
   {bucket:"General contractors",
    blurb:"The mission-critical builders that actually deliver the campuses — the scarce delivery capacity behind every capacity target, and often the counterparty in a build-vs-partner decision.",
    items:[
-     {name:"Turner Construction", tag:"General contractor", note:"Selected GC for Meta's $10B Lebanon, Indiana campus; ~$39B backlog, heavily data-center weighted."},
-     {name:"Holder · DPR · Mortenson · Fortis", tag:"Mission-critical GCs", note:"Top hyperscale GCs. Mortenson and Fortis have built Meta campuses in Iowa and Oregon; DPR has delivered 1.5+ GW of critical load."}
+     {name:"Turner Construction", tag:"General contractor", note:"One of the largest US builders, with a mission-critical practice that has made data centers a dominant share of its ~$39B backlog. At this scale, delivery capacity itself is a scarce, contested input to hitting capacity targets."},
+     {name:"Holder · DPR · Mortenson · Fortis", tag:"Mission-critical GCs", note:"The specialist mission-critical general contractors that actually build hyperscale campuses — a short list of firms with the crews, safety record and power-and-cooling expertise to deliver gigawatts on schedule."}
    ]},
   {bucket:"Power developers & utilities",
    blurb:"Companies that develop and finance the electricity itself — behind-the-meter gas, fuel cells and nuclear — plus the utilities and long-term PPAs that clear interconnection. Increasingly the gating item, ahead of the building.",
    items:[
-     {name:"GE Vernova", tag:"Turbines / on-site generation", note:"Gas-turbine order book full to 2029; 29 turbines (~1 GW) for Crusoe's Abilene campus; Chevron JV for co-located DC power."},
-     {name:"SB Energy (SoftBank)", tag:"Powered-land developer", note:"Provides powered infrastructure for Stargate sites (e.g. Milam County) — a power developer anchoring the deal."},
-     {name:"Constellation Energy", tag:"Nuclear PPA", note:"20-year, ~1.1 GW offtake with Meta from the Clinton Clean Energy Center starting 2027."},
-     {name:"Bloom Energy", tag:"Fuel cells", note:"Solid-oxide on-site fuel cells; a fast-to-deploy BTM source scaling across data centers this decade."},
-     {name:"Entergy · WEC · regulated utilities", tag:"Interconnection", note:"Host utilities (Entergy Louisiana for Hyperion, WEC for Microsoft Fairwater) providing the multi-GW grid capacity."}
+     {name:"GE Vernova", tag:"Turbines / on-site generation", note:"The power-equipment giant spun out of GE and the key supplier of gas turbines for behind-the-meter generation. Its order book is effectively sold out for years, making turbine slots a gating constraint on new capacity."},
+     {name:"SB Energy (SoftBank)", tag:"Powered-land developer", note:"A SoftBank-owned renewables and powered-land developer that assembles interconnection, generation and sites — anchoring data center deals as the power partner rather than the real-estate one."},
+     {name:"Constellation Energy", tag:"Nuclear PPA", note:"The largest US operator of nuclear plants and a leading clean-power supplier to data centers, structuring long-term PPAs — and reactor restarts — to match hyperscaler demand for firm, carbon-free power."},
+     {name:"Bloom Energy", tag:"Fuel cells", note:"A maker of solid-oxide fuel cells that provide fast-to-deploy, on-site power — an increasingly used bridge around utility interconnection queues for data centers."},
+     {name:"Entergy · WEC · regulated utilities", tag:"Interconnection", note:"The host utilities that ultimately deliver multi-gigawatt grid capacity. Their interconnection timelines and rate structures are often the real determinant of when — and where — a campus can be built."}
    ]}
 ];
 
@@ -1341,6 +1192,7 @@ function openDeal(d){
       <div class="met"><span class="met-k">Capacity</span><span class="met-v">${esc(d.power)}</span></div>
       <div class="met"><span class="met-k">Online</span><span class="met-v">${esc(d.online)}</span></div>
     </div>
+    ${d.footnote?`<div class="dsr-foot">${esc(d.footnote)}</div>`:""}
     <div class="dsr-body">
       <div class="sect">
         <div class="sect-h">Background</div>
